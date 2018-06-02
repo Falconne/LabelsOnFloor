@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B2130D81-9482-4727-BA55-10CACC544F2D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RoomSense</RootNamespace>
+    <AssemblyName>RoomSense</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="%24HugsLibChecker, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\UnlimitedHugs.Rimworld.HugsLibChecker.4.0.0\lib\net35\$HugsLibChecker.dll</HintPath>
+    </Reference>
+    <Reference Include="0Harmony, Version=1.0.9.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\UnlimitedHugs.Rimworld.HugsLib.4.1.1\lib\net35\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>ThirdParty\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="HugsLib, Version=0.18.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\UnlimitedHugs.Rimworld.HugsLib.4.1.1\lib\net35\HugsLib.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>ThirdParty\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>if exist "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\RimWorldWin_Data\Managed" (
+  if not exist "$(ProjectDir)ThirdParty" mkdir  "$(ProjectDir)ThirdParty"
+  copy /y "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\RimWorldWin_Data\Managed\UnityEngine.dll"  "$(ProjectDir)ThirdParty"
+  copy /y "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\RimWorldWin_Data\Managed\Assembly-CSharp.dll"  "$(ProjectDir)ThirdParty"
+)
+
+if not exist "$(ProjectDir)ThirdParty" (
+  echo Please see Readme about ThirdParty directory
+  exit 1
+)</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>if exist "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld" (
+  if not exist "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\Mods\$(TargetName)\Assemblies\" mkdir "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\Mods\$(TargetName)\Assemblies\"
+  xcopy /y/s  "$(ProjectDir)dist\*" "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\Mods"
+  copy /y "$(TargetPath)" "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\Mods\$(TargetName)\Assemblies\"
+  copy /y "$(TargetDir)\*HugsLibChecker.dll" "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\Mods\$(TargetName)\Assemblies\"
+)</PostBuildEvent>
+  </PropertyGroup>
+</Project>
