@@ -7,8 +7,8 @@
     <ProjectGuid>{B2130D81-9482-4727-BA55-10CACC544F2D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RoomSense</RootNamespace>
-    <AssemblyName>RoomSense</AssemblyName>
+    <RootNamespace>LabelsOnFloor</RootNamespace>
+    <AssemblyName>LabelsOnFloor</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -51,6 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="dist\LabelsOnFloor\About\About.xml" />
+    <Content Include="dist\LabelsOnFloor\About\Version.xml" />
+    <Content Include="dist\LabelsOnFloor\Languages\English\Keyed\FALCLF_LanguageData.xml" />
+    <Content Include="dist\LabelsOnFloor\Textures\AnonPro.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

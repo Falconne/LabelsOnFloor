@@ -14,9 +14,9 @@ namespace RoomSense
 
         internal static Main Instance { get; private set; }
 
-        public override string ModIdentifier => "LabelsOn";
+        public override string ModIdentifier => "LabelsOnFloor";
 
-        private SettingHandle<bool> _showRoomLabels;
+        private SettingHandle<bool> _enabled;
 
         public Main()
         {
@@ -35,14 +35,14 @@ namespace RoomSense
 
         public override void WorldLoaded()
         {
-            _infoCollector.Reset();
+            // _infoCollector.Reset();
         }
 
         public override void DefsLoaded()
         {
-            _showRoomLabels = Settings.GetHandle(
-                "showRoomLabels", "FALCLF.ShowRoomLabels".Translate(),
-                "FALCLF.ShowRoomLabelsDesc".Translate(), true);
+            _enabled = Settings.GetHandle(
+                "showRoomLabels", "FALCLF.Enabled".Translate(),
+                "FALCLF.EnabledDesc".Translate(), true);
         }
     }
 }
