@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
 using UnityEngine;
@@ -84,8 +85,8 @@ namespace LabelsOnFloor
             var triangles = new List<int>();
             var size = new Vector2
             {
-                x = 0.5f,
-                y = 1f
+                x = 1f,
+                y = 2f
             };
 
             var boundsInTexture = _fontHandler.GetBoundsInTextureFor(label);
@@ -128,31 +129,21 @@ namespace LabelsOnFloor
 
         public static PlacementData GetLabelPlacementDataForRoom(Room room, Map map, int labelLength)
         {
-            /*var interiorCells = room.Cells.Where(c => !map.thingGrid.CellContains(c, ThingDefOf.Wall));
-            var rows = new Dictionary<int, List<IntVec3>>();
-            foreach (var cell in interiorCells)
-            {
-                if (!rows.ContainsKey(cell.x))
-                {
-                    rows[cell.x] = new List<IntVec3>();
-                }
-                rows[cell.y].Add(cell);
-            }*/
-
             var lastRowCells = new List<IntVec3>();
-            var lastRowFound = -1;
+            var lastRowFound = int.MaxValue;
             foreach (var cell in room.Cells)
             {
                 if (map.thingGrid.CellContains(cell, ThingDefOf.Wall))
                     continue;
 
-                if (cell.z > lastRowFound)
+                if (cell.z < lastRowFound)
                 {
                     lastRowFound = cell.z;
                     lastRowCells.Clear();
                 }
 
-                lastRowCells.Add(cell);
+                if (cell.z == lastRowFound)
+                    lastRowCells.Add(cell);
             }
 
             if (lastRowCells.Count == 0)
@@ -160,6 +151,8 @@ namespace LabelsOnFloor
 
             var scaling = (float) lastRowCells.Count / labelLength;
             lastRowCells.Sort((c1, c2) => c1.x.CompareTo(c2.x));
+
+            //Main.Instance.Logger.Message($"Row count at {lastRowCells.First()} is {lastRowCells.Count}");
 
             return new PlacementData
             {
