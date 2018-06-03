@@ -65,38 +65,38 @@ namespace LabelsOnFloor
 
         private Mesh CreateMeshFor(string label)
         {
-            Vector3[] array = new Vector3[4];
-            Vector2[] array2 = new Vector2[4];
+            Vector3[] vertices = new Vector3[4];
+            Vector2[] uvMap = new Vector2[4];
             var size = new Vector2
             {
                 x = 0.5f,
                 y = 1f
             };
 
-            int[] array3 = new int[6];
-            array[0] = new Vector3(-0.5f * size.x, 0f, -0.5f * size.y);
-            array[1] = new Vector3(-0.5f * size.x, 0f, 0.5f * size.y);
-            array[2] = new Vector3(0.5f * size.x, 0f, 0.5f * size.y);
-            array[3] = new Vector3(0.5f * size.x, 0f, -0.5f * size.y);
+            int[] triangles = new int[6];
+            vertices[0] = new Vector3(-0.5f * size.x, 0f, -0.5f * size.y);
+            vertices[1] = new Vector3(-0.5f * size.x, 0f, 0.5f * size.y);
+            vertices[2] = new Vector3(0.5f * size.x, 0f, 0.5f * size.y);
+            vertices[3] = new Vector3(0.5f * size.x, 0f, -0.5f * size.y);
 
-            array2[0] = new Vector2(0.030f, 0f);
-            array2[1] = new Vector2(0.030f, 1f);
-            array2[2] = new Vector2(0.015f, 1f);
-            array2[3] = new Vector2(0.015f, 0f);
+            uvMap[0] = new Vector2(0.030f, 0f);
+            uvMap[1] = new Vector2(0.030f, 1f);
+            uvMap[2] = new Vector2(0.015f, 1f);
+            uvMap[3] = new Vector2(0.015f, 0f);
 
-            array3[0] = 0;
-            array3[1] = 1;
-            array3[2] = 2;
-            array3[3] = 0;
-            array3[4] = 2;
-            array3[5] = 3;
+            triangles[0] = 0;
+            triangles[1] = 1;
+            triangles[2] = 2;
+            triangles[3] = 0;
+            triangles[4] = 2;
+            triangles[5] = 3;
             var mesh = new Mesh
             {
                 name = "NewPlaneMesh()",
-                vertices = array,
-                uv = array2
+                vertices = vertices,
+                uv = uvMap
             };
-            mesh.SetTriangles(array3, 0);
+            mesh.SetTriangles(triangles, 0);
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 
