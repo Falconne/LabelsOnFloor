@@ -16,13 +16,13 @@ namespace LabelsOnFloor
 
         private SettingHandle<bool> _enabled;
 
-        private readonly LabelHolder _labelHolder = new LabelHolder();
+        public readonly LabelHolder _labelHolder = new LabelHolder();
         
-        private readonly LabelPlacementHandler _labelPlacementHandler;
+        public readonly LabelPlacementHandler _labelPlacementHandler;
 
         private readonly LabelDrawer _labelDrawer;
 
-        private readonly FontHandler _fontHandler = new FontHandler();
+        public readonly FontHandler _fontHandler = new FontHandler();
 
         public Main()
         {

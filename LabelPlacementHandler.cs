@@ -103,23 +103,83 @@ namespace LabelsOnFloor
             return mesh;
         }
 
+        //private static bool _first = true;
         public static IntVec3 GetPanelTopLeftCornerForRoom(Room room, Map map)
         {
-            var bestCell = room.BorderCells.First();
-            foreach (var cell in room.BorderCells)
+            //return room.Cells.FirstOrDefault(c => IsInteriorCell(c, map));
+
+            return room.Cells.FirstOrDefault(c => !map.thingGrid.CellContains(c, ThingDefOf.Wall));
+            /*if (_first)
             {
-                if (cell.x < bestCell.x || cell.z > bestCell.z)
-                    bestCell = cell;
+                Main.Instance.Logger.Message($"Things at {cell}");
+                var thingList = cell.GetThingList(map);
+                foreach (var thing in thingList)
+                {
+                    Main.Instance.Logger.Message(thing.ToString());
+                }
             }
 
-            var possiblyBetterCell = bestCell;
-            possiblyBetterCell.x++;
-            possiblyBetterCell.z--;
-            if (possiblyBetterCell.GetRoom(map) == room)
-                bestCell = possiblyBetterCell;
+            _first = false;
 
-            return bestCell;
+            return cell;*/
+
+
+            /*
+            foreach (var region in room.Regions)
+            {
+                var things = region.ListerThings.ThingsOfDef(ThingDefOf.Wall);
+                if (_first)
+                {
+                    Main.Instance.Logger.Message($"Walls:");
+                    foreach (var thing in things)
+                    {
+                        Main.Instance.Logger.Message($"thing.ToString() at {thing.Position}");
+                    }
+                }
+
+                foreach (var cell in region.Cells)
+                {
+                    if (things.Any(t => t.Position == cell))
+                        continue;
+
+                    if (_first)
+                    {
+                        Main.Instance.Logger.Message($"Cell {cell} is ok");
+                    }
+
+                    _first = false;
+                    return cell;
+                }
+
+
+            }
+
+            return default;
+            */
         }
+
+
+        /*private static bool IsInteriorCell(IntVec3 cell, Map map)
+        {
+            var thingList = cell.GetThingList(map);
+            foreach (var thing in thingList)
+            {
+                if (thing.def == ThingDefOf.Wall)
+                {
+                    Main.Instance.Logger.Message("wall found");
+                    return false;
+
+                }
+                if (_first)
+                {
+                    Main.Instance.Logger.Message($"Thing: {thing}");
+                }
+            }
+
+            Main.Instance.Logger.Message("First done");
+            _first = false;
+            return true;
+        }*/
 
         // Filter for indoor rooms with a role
         public static Room GetRoomContainingBuildingIfRelevant(Building building, Map map)
