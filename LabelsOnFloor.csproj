@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FontHandler.cs" />
+    <Compile Include="LabelHolder.cs" />
     <Compile Include="LabelPlacementHandler.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

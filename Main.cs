@@ -1,11 +1,9 @@
 ﻿using HugsLib.Settings;
 using HugsLib.Utils;
-using RimWorld;
 using RimWorld.Planet;
-using UnityEngine;
 using Verse;
 
-namespace RoomSense
+namespace LabelsOnFloor
 {
     public class Main : HugsLib.ModBase
     {
@@ -18,28 +16,33 @@ namespace RoomSense
 
         private SettingHandle<bool> _enabled;
 
-        private LabelPlacementHandler _labelPlacementHandler =
-            new LabelPlacementHandler();
+        private readonly LabelHolder _labelHolder = new LabelHolder();
+        
+        private readonly LabelPlacementHandler _labelPlacementHandler;
 
         public Main()
         {
             Instance = this;
+            _labelPlacementHandler = new LabelPlacementHandler(_labelHolder);
         }
 
         public override void OnGUI()
         {
+            if (!_enabled)
+                return;
+
             if (Current.ProgramState != ProgramState.Playing || Find.VisibleMap == null
                 || WorldRendererUtility.WorldRenderedNow)
             {
                 return;
             }
 
-            _labelPlacementHandler.Draw();
+            _labelPlacementHandler.RegenerateIfNeeded();
         }
 
         public override void WorldLoaded()
         {
-            // _infoCollector.Reset();
+            _labelHolder.Clear();
         }
 
         public override void DefsLoaded()

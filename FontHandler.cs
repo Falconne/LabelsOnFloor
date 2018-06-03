@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RoomSense
+namespace LabelsOnFloor
 {
     public struct CharBoundsInTexture
     {

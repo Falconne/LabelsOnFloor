@@ -4,21 +4,20 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace RoomSense
+namespace LabelsOnFloor
 {
-    class Label
-    {
-        public Mesh LabelMesh;
-        public Vector3 Position;
-    }
-
     public class LabelPlacementHandler
     {
         private readonly FontHandler _fontHandler = new FontHandler();
 
-        private readonly List<Label> _currentLabels = new List<Label>();
-
+        private readonly LabelHolder labelHolder;
+        
         private int _nextUpdateTick;
+
+        public LabelPlacementHandler(LabelHolder labelHolder)
+        {
+            this.labelHolder = labelHolder;
+        }
 
         public bool IsReady()
         {
@@ -27,7 +26,7 @@ namespace RoomSense
 
         public void Regenerate()
         {
-            _currentLabels.Clear();
+            labelHolder.Clear();
             var foundRooms = new HashSet<Room>();
 
             var map = Find.VisibleMap;
@@ -43,19 +42,23 @@ namespace RoomSense
                     continue;
 
                 foundRooms.Add(room);
-                var labelPosForRoom = GetPanelTopLeftCornerForRoom(room, map);
-                var meshForRoom = CreateMeshFor("A");
+                labelHolder.Add(
+                    new Label()
+                    {
+                        LabelMesh = CreateMeshFor("A"),
+                        Position = GetPanelTopLeftCornerForRoom(room, map)
+                    });
             }
         }
 
-        public void Draw()
+        public void RegenerateIfNeeded()
         {
             var tick = Find.TickManager.TicksGame;
-            if (tick >= _nextUpdateTick)
-            {
-                Regenerate();
-                _nextUpdateTick = tick + 200;
-            }
+            if (tick < _nextUpdateTick)
+                return;
+
+            _nextUpdateTick = tick + 200;
+            Regenerate();
         }
 
         private Mesh CreateMeshFor(string label)

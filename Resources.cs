@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Verse;
 
-namespace RoomSense
+namespace LabelsOnFloor
 {
     [StaticConstructorOnStartup]
     public class Resources
