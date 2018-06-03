@@ -56,7 +56,7 @@ namespace LabelsOnFloor
                 _labelHolder.Add(
                     new Label()
                     {
-                        LabelMesh = CreateMeshFor("Hello"),
+                        LabelMesh = CreateMeshFor("E"),
                         Position = GetPanelTopLeftCornerForRoom(room, map)
                     }
                 );
@@ -85,10 +85,10 @@ namespace LabelsOnFloor
                 vertices.Add(new Vector3(startingVertexXOffset + 0.5f * size.x, 0f, -0.5f * size.y));
                 startingVertexXOffset += 0.5f * size.x;
 
-                uvMap.Add(new Vector2(charBoundsInTexture.Right, 0f));
-                uvMap.Add(new Vector2(charBoundsInTexture.Right, 1f));
-                uvMap.Add(new Vector2(charBoundsInTexture.Left, 1f));
                 uvMap.Add(new Vector2(charBoundsInTexture.Left, 0f));
+                uvMap.Add(new Vector2(charBoundsInTexture.Left, 1f));
+                uvMap.Add(new Vector2(charBoundsInTexture.Right, 1f));
+                uvMap.Add(new Vector2(charBoundsInTexture.Right, 0f));
 
                 triangles.Add(startingTriangleVertex + 0);
                 triangles.Add(startingTriangleVertex + 1);
