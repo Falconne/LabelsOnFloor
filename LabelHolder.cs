@@ -4,10 +4,16 @@ using Verse;
 
 namespace LabelsOnFloor
 {
+    public class PlacementData
+    {
+        public IntVec3 Position;
+        public Vector3 Scale;
+    }
+
     public class Label
     {
         public Mesh LabelMesh;
-        public IntVec3 Position;
+        public PlacementData LabelPlacementData;
     }
 
     public class LabelHolder

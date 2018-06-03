@@ -55,13 +55,15 @@ namespace LabelsOnFloor
                     continue;
 
                 foundRooms.Add(room);
-                _labelHolder.Add(
-                    new Label()
-                    {
-                        LabelMesh = GetMeshFor("EFe"),
-                        Position = GetPanelTopLeftCornerForRoom(room, map)
-                    }
-                );
+                var text = "EFe";
+                var label = new Label()
+                {
+                    LabelMesh = GetMeshFor(text),
+                    LabelPlacementData = GetLabelPlacementDataForRoom(room, map, text.Length)
+                };
+
+                if (label.LabelPlacementData != null)
+                    _labelHolder.Add(label);
             }
         }
 
@@ -124,9 +126,46 @@ namespace LabelsOnFloor
             return mesh;
         }
 
-        public static IntVec3 GetPanelTopLeftCornerForRoom(Room room, Map map)
+        public static PlacementData GetLabelPlacementDataForRoom(Room room, Map map, int labelLength)
         {
-            return room.Cells.FirstOrDefault(c => !map.thingGrid.CellContains(c, ThingDefOf.Wall));
+            /*var interiorCells = room.Cells.Where(c => !map.thingGrid.CellContains(c, ThingDefOf.Wall));
+            var rows = new Dictionary<int, List<IntVec3>>();
+            foreach (var cell in interiorCells)
+            {
+                if (!rows.ContainsKey(cell.x))
+                {
+                    rows[cell.x] = new List<IntVec3>();
+                }
+                rows[cell.y].Add(cell);
+            }*/
+
+            var lastRowCells = new List<IntVec3>();
+            var lastRowFound = -1;
+            foreach (var cell in room.Cells)
+            {
+                if (map.thingGrid.CellContains(cell, ThingDefOf.Wall))
+                    continue;
+
+                if (cell.z > lastRowFound)
+                {
+                    lastRowFound = cell.z;
+                    lastRowCells.Clear();
+                }
+
+                lastRowCells.Add(cell);
+            }
+
+            if (lastRowCells.Count == 0)
+                return null;
+
+            var scaling = (float) lastRowCells.Count / labelLength;
+            lastRowCells.Sort((c1, c2) => c1.x.CompareTo(c2.x));
+
+            return new PlacementData
+            {
+                Position = lastRowCells.First(),
+                Scale = new Vector3(scaling, 1f, scaling)
+            };
         }
 
         // Filter for indoor rooms with a role
