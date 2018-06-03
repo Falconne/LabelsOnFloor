@@ -92,13 +92,13 @@ namespace LabelsOnFloor
             var boundsInTexture = _fontHandler.GetBoundsInTextureFor(label);
             var startingTriangleVertex = 0;
             var startingVertexXOffset = 0f;
-            var yTop = size.y - 0.5f;
+            var yTop = size.y - 0.4f;
             foreach (var charBoundsInTexture in boundsInTexture)
             {
-                vertices.Add(new Vector3(startingVertexXOffset, 0f, -0.5f));
+                vertices.Add(new Vector3(startingVertexXOffset, 0f, -0.4f));
                 vertices.Add(new Vector3(startingVertexXOffset, 0f, yTop));
                 vertices.Add(new Vector3(startingVertexXOffset + size.x, 0f, yTop));
-                vertices.Add(new Vector3(startingVertexXOffset + size.x, 0f, -0.5f));
+                vertices.Add(new Vector3(startingVertexXOffset + size.x, 0f, -0.4f));
                 startingVertexXOffset += size.x;
 
                 uvMap.Add(new Vector2(charBoundsInTexture.Left, 0f));
