@@ -26,14 +26,6 @@ namespace LabelsOnFloor
             return true;
         }
 
-        public IEnumerable<CharBoundsInTexture> GetBoundsInTextureFor(string text)
-        {
-            foreach (char c in text)
-            {
-                yield return GetCharBoundsInTextureFor(c);
-            }
-        }
-
         public Material GetMaterial()
         {
             if (_material == null)
@@ -44,6 +36,14 @@ namespace LabelsOnFloor
             }
 
             return _material;
+        }
+
+        public IEnumerable<CharBoundsInTexture> GetBoundsInTextureFor(string text)
+        {
+            foreach (char c in text)
+            {
+                yield return GetCharBoundsInTextureFor(c);
+            }
         }
 
         private CharBoundsInTexture GetCharBoundsInTextureFor(char c)

@@ -56,7 +56,7 @@ namespace LabelsOnFloor
                 _labelHolder.Add(
                     new Label()
                     {
-                        LabelMesh = CreateMeshFor("A"),
+                        LabelMesh = CreateMeshFor("Hello"),
                         Position = GetPanelTopLeftCornerForRoom(room, map)
                     }
                 );
@@ -67,29 +67,38 @@ namespace LabelsOnFloor
         {
             var vertices = new List<Vector3>();
             var uvMap = new List<Vector2>();
+            var triangles = new List<int>();
             var size = new Vector2
             {
                 x = 0.5f,
                 y = 1f
             };
 
-            var triangles = new List<int>();
-            vertices.Add(new Vector3(-0.5f * size.x, 0f, -0.5f * size.y));
-            vertices.Add(new Vector3(-0.5f * size.x, 0f, 0.5f * size.y));
-            vertices.Add(new Vector3(0.5f * size.x, 0f, 0.5f * size.y));
-            vertices.Add(new Vector3(0.5f * size.x, 0f, -0.5f * size.y));
+            var boundsInTexture = _fontHandler.GetBoundsInTextureFor(label);
+            var startingTriangleVertex = 0;
+            var startingVertexXOffset = 0f;
+            foreach (var charBoundsInTexture in boundsInTexture)
+            {
+                vertices.Add(new Vector3(startingVertexXOffset + -0.5f * size.x, 0f, -0.5f * size.y));
+                vertices.Add(new Vector3(startingVertexXOffset + -0.5f * size.x, 0f, 0.5f * size.y));
+                vertices.Add(new Vector3(startingVertexXOffset + 0.5f * size.x, 0f, 0.5f * size.y));
+                vertices.Add(new Vector3(startingVertexXOffset + 0.5f * size.x, 0f, -0.5f * size.y));
+                startingVertexXOffset += 0.5f * size.x;
 
-            uvMap.Add(new Vector2(0.030f, 0f));
-            uvMap.Add(new Vector2(0.030f, 1f));
-            uvMap.Add(new Vector2(0.015f, 1f));
-            uvMap.Add(new Vector2(0.015f, 0f));
+                uvMap.Add(new Vector2(charBoundsInTexture.Right, 0f));
+                uvMap.Add(new Vector2(charBoundsInTexture.Right, 1f));
+                uvMap.Add(new Vector2(charBoundsInTexture.Left, 1f));
+                uvMap.Add(new Vector2(charBoundsInTexture.Left, 0f));
 
-            triangles.Add(0);
-            triangles.Add(1);
-            triangles.Add(2);
-            triangles.Add(0);
-            triangles.Add(2);
-            triangles.Add(3);
+                triangles.Add(startingTriangleVertex + 0);
+                triangles.Add(startingTriangleVertex + 1);
+                triangles.Add(startingTriangleVertex + 2);
+                triangles.Add(startingTriangleVertex + 0);
+                triangles.Add(startingTriangleVertex + 2);
+                triangles.Add(startingTriangleVertex + 3);
+                startingTriangleVertex += 4;
+            }
+
             var mesh = new Mesh
             {
                 name = "NewPlaneMesh()",
