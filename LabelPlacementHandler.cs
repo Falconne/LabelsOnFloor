@@ -44,17 +44,18 @@ namespace RoomSense
 
                 foundRooms.Add(room);
                 var labelPosForRoom = GetPanelTopLeftCornerForRoom(room, map);
+                var meshForRoom = CreateMeshFor("A");
             }
         }
 
         public void Draw()
         {
             var tick = Find.TickManager.TicksGame;
-            if (tick < _nextUpdateTick)
-                return;
-
-            _nextUpdateTick = tick + 200;
-
+            if (tick >= _nextUpdateTick)
+            {
+                Regenerate();
+                _nextUpdateTick = tick + 200;
+            }
         }
 
         private Mesh CreateMeshFor(string label)

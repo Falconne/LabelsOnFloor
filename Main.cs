@@ -18,6 +18,9 @@ namespace RoomSense
 
         private SettingHandle<bool> _enabled;
 
+        private LabelPlacementHandler _labelPlacementHandler =
+            new LabelPlacementHandler();
+
         public Main()
         {
             Instance = this;
@@ -31,6 +34,7 @@ namespace RoomSense
                 return;
             }
 
+            _labelPlacementHandler.Draw();
         }
 
         public override void WorldLoaded()
