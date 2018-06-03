@@ -33,8 +33,8 @@ namespace LabelsOnFloor
             var s = new Vector3(1f, 1f, 1f);
             Matrix4x4 matrix = default;
             var pos = label.Position.ToVector3();
-            pos.x -= .5f;
-            pos.z -= .5f;
+            pos.x += .5f;
+            pos.z += .5f;
             matrix.SetTRS(pos, Quaternion.identity, s);
 
             Graphics.DrawMesh(label.LabelMesh, matrix, _fontHandler.GetMaterial(), 0);
