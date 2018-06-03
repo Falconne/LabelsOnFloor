@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
+using Verse;
 
 namespace LabelsOnFloor
 {
@@ -10,6 +12,8 @@ namespace LabelsOnFloor
     public class FontHandler
     {
         private float _charWidthAsTexturePortion = -1f;
+
+        private Material _material;
 
         public bool IsFontLoaded()
         {
@@ -28,6 +32,18 @@ namespace LabelsOnFloor
             {
                 yield return GetCharBoundsInTextureFor(c);
             }
+        }
+
+        public Material GetMaterial()
+        {
+            if (_material == null)
+            {
+                var color = Color.white;
+                color.a = 0.33f;
+                _material = MaterialPool.MatFrom(Resources.Font, ShaderDatabase.Transparent, color);
+            }
+
+            return _material;
         }
 
         private CharBoundsInTexture GetCharBoundsInTextureFor(char c)

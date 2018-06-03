@@ -20,13 +20,18 @@ namespace LabelsOnFloor
         
         private readonly LabelPlacementHandler _labelPlacementHandler;
 
+        private readonly LabelDrawer _labelDrawer;
+
+        private readonly FontHandler _fontHandler = new FontHandler();
+
         public Main()
         {
             Instance = this;
-            _labelPlacementHandler = new LabelPlacementHandler(_labelHolder);
+            _labelPlacementHandler = new LabelPlacementHandler(_labelHolder, _fontHandler);
+            _labelDrawer = new LabelDrawer(_labelHolder, _fontHandler);
         }
 
-        public override void OnGUI()
+        public void Draw()
         {
             if (!_enabled)
                 return;
@@ -37,7 +42,12 @@ namespace LabelsOnFloor
                 return;
             }
 
+            if (!_labelPlacementHandler.IsReady())
+                return;
+
             _labelPlacementHandler.RegenerateIfNeeded();
+            _labelDrawer.Draw();
+
         }
 
         public override void WorldLoaded()

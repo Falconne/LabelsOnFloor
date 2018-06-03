@@ -23,5 +23,10 @@ namespace LabelsOnFloor
         {
             _currentLabels.Add(label);
         }
+
+        public IEnumerable<Label> GetLabels()
+        {
+            return _currentLabels;
+        }
     }
 }

@@ -8,15 +8,16 @@ namespace LabelsOnFloor
 {
     public class LabelPlacementHandler
     {
-        private readonly FontHandler _fontHandler = new FontHandler();
+        private readonly FontHandler _fontHandler;
 
-        private readonly LabelHolder labelHolder;
-        
+        private readonly LabelHolder _labelHolder;
+
         private int _nextUpdateTick;
 
-        public LabelPlacementHandler(LabelHolder labelHolder)
+        public LabelPlacementHandler(LabelHolder labelHolder, FontHandler fontHandler)
         {
-            this.labelHolder = labelHolder;
+            _labelHolder = labelHolder;
+            _fontHandler = fontHandler;
         }
 
         public bool IsReady()
@@ -24,9 +25,19 @@ namespace LabelsOnFloor
             return _fontHandler.IsFontLoaded();
         }
 
-        public void Regenerate()
+        public void RegenerateIfNeeded()
         {
-            labelHolder.Clear();
+            var tick = Find.TickManager.TicksGame;
+            if (tick < _nextUpdateTick)
+                return;
+
+            _nextUpdateTick = tick + 200;
+            Regenerate();
+        }
+
+        private void Regenerate()
+        {
+            _labelHolder.Clear();
             var foundRooms = new HashSet<Room>();
 
             var map = Find.VisibleMap;
@@ -42,23 +53,14 @@ namespace LabelsOnFloor
                     continue;
 
                 foundRooms.Add(room);
-                labelHolder.Add(
+                _labelHolder.Add(
                     new Label()
                     {
                         LabelMesh = CreateMeshFor("A"),
                         Position = GetPanelTopLeftCornerForRoom(room, map)
-                    });
+                    }
+                );
             }
-        }
-
-        public void RegenerateIfNeeded()
-        {
-            var tick = Find.TickManager.TicksGame;
-            if (tick < _nextUpdateTick)
-                return;
-
-            _nextUpdateTick = tick + 200;
-            Regenerate();
         }
 
         private Mesh CreateMeshFor(string label)

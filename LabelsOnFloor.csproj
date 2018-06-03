@@ -46,7 +46,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DynamicDrawManager_DrawDynamicThings_Patch.cs" />
     <Compile Include="FontHandler.cs" />
+    <Compile Include="LabelDrawer.cs" />
     <Compile Include="LabelHolder.cs" />
     <Compile Include="LabelPlacementHandler.cs" />
     <Compile Include="Main.cs" />
