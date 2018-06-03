@@ -17,6 +17,8 @@ namespace LabelsOnFloor
 
         private int _nextUpdateTick;
 
+        private Map _map;
+
         public LabelPlacementHandler(LabelHolder labelHolder, FontHandler fontHandler)
         {
             _labelHolder = labelHolder;
@@ -31,24 +33,77 @@ namespace LabelsOnFloor
         public void RegenerateIfNeeded()
         {
             var tick = Find.TickManager.TicksGame;
-            if (tick < _nextUpdateTick)
+            if (_map == Find.VisibleMap && tick < _nextUpdateTick)
                 return;
 
             _nextUpdateTick = tick + 200;
             Regenerate();
         }
 
+        public PlacementData GetLabelPlacementDataForRoom(Room room, int labelLength)
+        {
+            var lastRowCells = new List<IntVec3>();
+            var lastRowFound = int.MaxValue;
+            foreach (var cell in room.Cells)
+            {
+                if (_map.thingGrid.CellContains(cell, ThingDefOf.Wall))
+                    continue;
+
+                if (cell.z < lastRowFound)
+                {
+                    lastRowFound = cell.z;
+                    lastRowCells.Clear();
+                }
+
+                if (cell.z == lastRowFound)
+                    lastRowCells.Add(cell);
+            }
+
+            if (lastRowCells.Count == 0)
+                return null;
+
+            var scaling = (float) lastRowCells.Count / labelLength;
+            lastRowCells.Sort((c1, c2) => c1.x.CompareTo(c2.x));
+
+            //Main.Instance.Logger.Message($"Row count at {lastRowCells.First()} is {lastRowCells.Count}");
+
+            return new PlacementData
+            {
+                Position = lastRowCells.First(),
+                Scale = new Vector3(scaling, 1f, scaling)
+            };
+        }
+
+        // Filter for indoor rooms with a role
+        public Room GetRoomContainingBuildingIfRelevant(Building building)
+        {
+            if (building.Faction != Faction.OfPlayer)
+                return null;
+
+            if (building.Position.Fogged(_map))
+                return null;
+
+            var room = building.Position.GetRoom(_map);
+            if (room == null || room.PsychologicallyOutdoors)
+                return null;
+
+            if (room.Role == RoomRoleDefOf.None)
+                return null;
+
+            return room;
+        }
+
         private void Regenerate()
         {
+            _map = Find.VisibleMap;
             _labelHolder.Clear();
             var foundRooms = new HashSet<Room>();
 
-            var map = Find.VisibleMap;
-            var listerBuildings = map.listerBuildings;
+            var listerBuildings = _map.listerBuildings;
             // Room roles are defined by buildings, so only need to check rooms with buildings
             foreach (var building in listerBuildings.allBuildingsColonist)
             {
-                var room = GetRoomContainingBuildingIfRelevant(building, map);
+                var room = GetRoomContainingBuildingIfRelevant(building);
                 if (room == null)
                     continue;
 
@@ -60,7 +115,7 @@ namespace LabelsOnFloor
                 var label = new Label()
                 {
                     LabelMesh = GetMeshFor(text),
-                    LabelPlacementData = GetLabelPlacementDataForRoom(room, map, text.Length)
+                    LabelPlacementData = GetLabelPlacementDataForRoom(room, text.Length)
                 };
 
                 if (label.LabelPlacementData != null)
@@ -68,7 +123,7 @@ namespace LabelsOnFloor
             }
         }
 
-        public Mesh GetMeshFor(string label)
+        private Mesh GetMeshFor(string label)
         {
             if (!_cachedMeshes.ContainsKey(label))
             {
@@ -126,59 +181,6 @@ namespace LabelsOnFloor
             mesh.RecalculateBounds();
 
             return mesh;
-        }
-
-        public static PlacementData GetLabelPlacementDataForRoom(Room room, Map map, int labelLength)
-        {
-            var lastRowCells = new List<IntVec3>();
-            var lastRowFound = int.MaxValue;
-            foreach (var cell in room.Cells)
-            {
-                if (map.thingGrid.CellContains(cell, ThingDefOf.Wall))
-                    continue;
-
-                if (cell.z < lastRowFound)
-                {
-                    lastRowFound = cell.z;
-                    lastRowCells.Clear();
-                }
-
-                if (cell.z == lastRowFound)
-                    lastRowCells.Add(cell);
-            }
-
-            if (lastRowCells.Count == 0)
-                return null;
-
-            var scaling = (float) lastRowCells.Count / labelLength;
-            lastRowCells.Sort((c1, c2) => c1.x.CompareTo(c2.x));
-
-            //Main.Instance.Logger.Message($"Row count at {lastRowCells.First()} is {lastRowCells.Count}");
-
-            return new PlacementData
-            {
-                Position = lastRowCells.First(),
-                Scale = new Vector3(scaling, 1f, scaling)
-            };
-        }
-
-        // Filter for indoor rooms with a role
-        public static Room GetRoomContainingBuildingIfRelevant(Building building, Map map)
-        {
-            if (building.Faction != Faction.OfPlayer)
-                return null;
-
-            if (building.Position.Fogged(map))
-                return null;
-
-            var room = building.Position.GetRoom(map);
-            if (room == null || room.PsychologicallyOutdoors)
-                return null;
-
-            if (room.Role == RoomRoleDefOf.None)
-                return null;
-
-            return room;
         }
 
     }
