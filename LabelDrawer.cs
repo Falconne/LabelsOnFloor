@@ -23,7 +23,6 @@ namespace LabelsOnFloor
                 if (!currentViewRect.Contains(label.Position))
                     continue;
 
-            Main.Instance.Logger.Message($"Drawing");
                 DrawLabel(label);
             }
         }

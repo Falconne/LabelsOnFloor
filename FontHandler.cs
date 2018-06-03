@@ -68,10 +68,10 @@ namespace LabelsOnFloor
             
             // Convert lower case to upper
             if (asciiVal < 123)
-                return asciiVal - 65;
+                return asciiVal - 64;
 
             if (asciiVal < 126)
-                return asciiVal - 122 + 63;
+                return asciiVal - 58;
 
             return 0;
         }
