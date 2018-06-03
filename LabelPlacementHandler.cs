@@ -13,6 +13,8 @@ namespace LabelsOnFloor
 
         private readonly LabelHolder _labelHolder;
 
+        private readonly LabelMaker _labelMaker = new LabelMaker();
+
         private readonly Dictionary<string, Mesh> _cachedMeshes = new Dictionary<string, Mesh>();
 
         private int _nextUpdateTick;
@@ -65,8 +67,6 @@ namespace LabelsOnFloor
             var scaling = (float) lastRowCells.Count / labelLength;
             lastRowCells.Sort((c1, c2) => c1.x.CompareTo(c2.x));
 
-            //Main.Instance.Logger.Message($"Row count at {lastRowCells.First()} is {lastRowCells.Count}");
-
             return new PlacementData
             {
                 Position = lastRowCells.First(),
@@ -111,7 +111,7 @@ namespace LabelsOnFloor
                     continue;
 
                 foundRooms.Add(room);
-                var text = "EFe";
+                var text = _labelMaker.GetRoomLabel(room);
                 var label = new Label()
                 {
                     LabelMesh = GetMeshFor(text),

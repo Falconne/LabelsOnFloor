@@ -50,6 +50,7 @@
     <Compile Include="FontHandler.cs" />
     <Compile Include="LabelDrawer.cs" />
     <Compile Include="LabelHolder.cs" />
+    <Compile Include="LabelMaker.cs" />
     <Compile Include="LabelPlacementHandler.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
