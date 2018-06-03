@@ -12,6 +12,8 @@ namespace LabelsOnFloor
 
         private readonly LabelHolder _labelHolder;
 
+        private readonly Dictionary<string, Mesh> _cachedMeshes = new Dictionary<string, Mesh>();
+
         private int _nextUpdateTick;
 
         public LabelPlacementHandler(LabelHolder labelHolder, FontHandler fontHandler)
@@ -56,11 +58,21 @@ namespace LabelsOnFloor
                 _labelHolder.Add(
                     new Label()
                     {
-                        LabelMesh = CreateMeshFor("EFe"),
+                        LabelMesh = GetMeshFor("EFe"),
                         Position = GetPanelTopLeftCornerForRoom(room, map)
                     }
                 );
             }
+        }
+
+        public Mesh GetMeshFor(string label)
+        {
+            if (!_cachedMeshes.ContainsKey(label))
+            {
+                _cachedMeshes[label] = CreateMeshFor(label);
+            }
+
+            return _cachedMeshes[label];
         }
 
         private Mesh CreateMeshFor(string label)
