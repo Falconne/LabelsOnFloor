@@ -89,7 +89,7 @@ namespace LabelsOnFloor
             if (room == null || room.PsychologicallyOutdoors)
                 return null;
 
-            if (room.Role == RoomRoleDefOf.None)
+            if (room.Role == RoomRoleDefOf.None || room.Role.defName == "Room")
                 return null;
 
             return room;
