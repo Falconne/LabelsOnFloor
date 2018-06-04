@@ -6,6 +6,13 @@ namespace LabelsOnFloor
 {
     public class LabelMaker
     {
+        private string _defaultGrowingZonePrefix;
+
+        public LabelMaker()
+        {
+            _defaultGrowingZonePrefix = "GrowingZone".Translate();
+        }
+
         public string GetRoomLabel(Room room)
         {
             return room.Role.LabelCap.ToUpper();
@@ -13,11 +20,14 @@ namespace LabelsOnFloor
 
         public string GetZoneLabel(Zone zone)
         {
-            var growingZone = zone as Zone_Growing;
-            if (growingZone == null)
+            if (!(zone is Zone_Growing growingZone))
                 return zone.label.ToUpper();
 
-            return growingZone.GetPlantDefToGrow().LabelCap.ToUpper();
+            // Use custom zone name, if it looks like it has been changed
+            if (growingZone.label.StartsWith(_defaultGrowingZonePrefix))
+                return growingZone.GetPlantDefToGrow().LabelCap.ToUpper();
+
+            return growingZone.label.ToUpper();
         }
     }
 }
