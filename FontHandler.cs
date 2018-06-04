@@ -21,7 +21,7 @@ namespace LabelsOnFloor
                 return false;
 
             if (_charWidthAsTexturePortion < 0f)
-                _charWidthAsTexturePortion =  15f / Resources.Font.width;
+                _charWidthAsTexturePortion =  35f / Resources.Font.width;
 
             return true;
         }
@@ -66,11 +66,7 @@ namespace LabelsOnFloor
             if (asciiVal < 97)
                 return asciiVal - 32;
             
-            // Convert lower case to upper
-            if (asciiVal < 123)
-                return asciiVal - 64;
-
-            if (asciiVal < 126)
+            if (asciiVal < 127)
                 return asciiVal - 58;
 
             return 0;

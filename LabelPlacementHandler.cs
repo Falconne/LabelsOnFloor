@@ -111,7 +111,7 @@ namespace LabelsOnFloor
                     continue;
 
                 foundRooms.Add(room);
-                var text = _labelMaker.GetRoomLabel(room);
+                var text = _labelMaker.GetRoomLabel(room).ToUpper();
                 var label = new Label()
                 {
                     LabelMesh = GetMeshFor(text),
