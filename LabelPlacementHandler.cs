@@ -65,6 +65,8 @@ namespace LabelsOnFloor
                 return null;
 
             var scaling = (float) lastRowCells.Count / labelLength;
+            if (scaling > 1f)
+                scaling = 1f;
             lastRowCells.Sort((c1, c2) => c1.x.CompareTo(c2.x));
 
             return new PlacementData
