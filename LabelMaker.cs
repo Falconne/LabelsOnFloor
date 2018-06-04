@@ -17,7 +17,7 @@ namespace LabelsOnFloor
 
         public string GetRoomLabel(Room room)
         {
-            return (string) _roomLabelGetter?.Invoke(null, new object[] {room}) ?? room.Role.LabelCap;
+            return room.Role.LabelCap.ToUpper();
         }
     }
 }

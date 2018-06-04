@@ -42,7 +42,62 @@ namespace LabelsOnFloor
             Regenerate();
         }
 
-        public PlacementData GetLabelPlacementDataForRoom(Room room, int labelLength)
+        private void Regenerate()
+        {
+            _map = Find.VisibleMap;
+            _labelHolder.Clear();
+
+            RegenerateRoomLabels();
+            RegenerateZoneLabels();
+        }
+
+        private void RegenerateRoomLabels()
+        {
+            var foundRooms = new HashSet<Room>();
+            var listerBuildings = _map.listerBuildings;
+            // Room roles are defined by buildings, so only need to check rooms with buildings
+            foreach (var building in listerBuildings.allBuildingsColonist)
+            {
+                var room = GetRoomContainingBuildingIfRelevant(building);
+                if (room == null)
+                    continue;
+
+                if (foundRooms.Contains(room))
+                    continue;
+
+                foundRooms.Add(room);
+                var text = _labelMaker.GetRoomLabel(room);
+                var label = new Label()
+                {
+                    LabelMesh = GetMeshFor(text),
+                    LabelPlacementData = GetLabelPlacementDataForRoom(room, text.Length)
+                };
+
+                if (label.LabelPlacementData != null)
+                    _labelHolder.Add(label);
+            }
+        }
+
+        // Filter for indoor rooms with a role
+        private Room GetRoomContainingBuildingIfRelevant(Building building)
+        {
+            if (building.Faction != Faction.OfPlayer)
+                return null;
+
+            if (building.Position.Fogged(_map))
+                return null;
+
+            var room = building.Position.GetRoom(_map);
+            if (room == null || room.PsychologicallyOutdoors)
+                return null;
+
+            if (room.Role == RoomRoleDefOf.None || room.Role.defName == "Room")
+                return null;
+
+            return room;
+        }
+
+        private PlacementData GetLabelPlacementDataForRoom(Room room, int labelLength)
         {
             var lastRowCells = new List<IntVec3>();
             var lastRowFound = int.MaxValue;
@@ -76,54 +131,59 @@ namespace LabelsOnFloor
             };
         }
 
-        // Filter for indoor rooms with a role
-        public Room GetRoomContainingBuildingIfRelevant(Building building)
+        private void RegenerateZoneLabels()
         {
-            if (building.Faction != Faction.OfPlayer)
-                return null;
-
-            if (building.Position.Fogged(_map))
-                return null;
-
-            var room = building.Position.GetRoom(_map);
-            if (room == null || room.PsychologicallyOutdoors)
-                return null;
-
-            if (room.Role == RoomRoleDefOf.None || room.Role.defName == "Room")
-                return null;
-
-            return room;
-        }
-
-        private void Regenerate()
-        {
-            _map = Find.VisibleMap;
-            _labelHolder.Clear();
-            var foundRooms = new HashSet<Room>();
-
-            var listerBuildings = _map.listerBuildings;
-            // Room roles are defined by buildings, so only need to check rooms with buildings
-            foreach (var building in listerBuildings.allBuildingsColonist)
+            foreach (var zone in _map.zoneManager.AllZones)
             {
-                var room = GetRoomContainingBuildingIfRelevant(building);
-                if (room == null)
+                var text = zone.label.ToUpper();
+                if (string.IsNullOrEmpty(text))
                     continue;
 
-                if (foundRooms.Contains(room))
-                    continue;
-
-                foundRooms.Add(room);
-                var text = _labelMaker.GetRoomLabel(room).ToUpper();
                 var label = new Label()
                 {
                     LabelMesh = GetMeshFor(text),
-                    LabelPlacementData = GetLabelPlacementDataForRoom(room, text.Length)
+                    LabelPlacementData = GetLabelPlacementDataForZone(zone, text.Length)
                 };
 
                 if (label.LabelPlacementData != null)
                     _labelHolder.Add(label);
             }
         }
+
+        private PlacementData GetLabelPlacementDataForZone(Zone zone, int labelLength)
+        {
+            var lastRowFound = int.MaxValue;
+            var lastRowCells = new List<IntVec3>();
+            foreach (var cell in zone.Cells)
+            {
+                if (cell.Fogged(_map))
+                    return null;
+
+                if (cell.z < lastRowFound)
+                {
+                    lastRowFound = cell.z;
+                    lastRowCells.Clear();
+                }
+
+                if (cell.z == lastRowFound)
+                    lastRowCells.Add(cell);
+
+            }
+            if (lastRowCells.Count == 0)
+                return null;
+
+            var scaling = (float) lastRowCells.Count / labelLength;
+            if (scaling > 1f)
+                scaling = 1f;
+            lastRowCells.Sort((c1, c2) => c1.x.CompareTo(c2.x));
+
+            return new PlacementData
+            {
+                Position = lastRowCells.First(),
+                Scale = new Vector3(scaling, 1f, scaling)
+            };
+        }
+
 
         private Mesh GetMeshFor(string label)
         {
