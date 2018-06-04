@@ -63,7 +63,7 @@
     <Content Include="dist\LabelsOnFloor\About\About.xml" />
     <Content Include="dist\LabelsOnFloor\About\Version.xml" />
     <Content Include="dist\LabelsOnFloor\Languages\English\Keyed\FALCLF_LanguageData.xml" />
-    <Content Include="dist\LabelsOnFloor\Textures\AnonPro.png" />
+    <Content Include="dist\LabelsOnFloor\Textures\Consolas.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
