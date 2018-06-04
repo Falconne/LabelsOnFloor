@@ -135,7 +135,8 @@ namespace LabelsOnFloor
         {
             foreach (var zone in _map.zoneManager.AllZones)
             {
-                var text = zone.label.ToUpper();
+                var text = _labelMaker.GetZoneLabel(zone);
+                Main.Instance.Logger.Message($"Got zone: {text}");
                 if (string.IsNullOrEmpty(text))
                     continue;
 
@@ -205,6 +206,9 @@ namespace LabelsOnFloor
                 x = 1f,
                 y = 2f
             };
+
+            Main.Instance.Logger.Message($"Mesh for: {label}");
+
 
             var boundsInTexture = _fontHandler.GetBoundsInTextureFor(label);
             var startingTriangleVertex = 0;
