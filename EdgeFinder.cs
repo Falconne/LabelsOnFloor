@@ -45,13 +45,13 @@ namespace LabelsOnFloor
             var placementData = new PlacementData();
             if (lastRowCells.Count < lastColCells.Count)
             {
-                placementData.Position = GetFirstCell(lastColCells, c => c.z);
+                placementData.Position = GetFirstCellInColumn(lastColCells);
                 placementData.Scale = GetScalingVector(lastColCells.Count, labelLength);
                 placementData.Flipped = true;
             }
             else
             {
-                placementData.Position = GetFirstCell(lastRowCells, c => c.x);
+                placementData.Position = GetFirstCellInRow(lastRowCells);
                 placementData.Scale = GetScalingVector(lastRowCells.Count, labelLength);
             }
 
@@ -68,17 +68,28 @@ namespace LabelsOnFloor
 
         }
 
-        private static IntVec3 GetFirstCell(IEnumerable<IntVec3> cells, Func<IntVec3, int> getValue)
+        private static IntVec3 GetFirstCellInRow(IList<IntVec3> cells)
         {
-            var lowestValFound = int.MaxValue;
-            IntVec3 bestCellFound = default;
+            var bestCellFound = cells.First();
             foreach (var cell in cells)
             {
-                var val = getValue(cell);
-                if (val >= lowestValFound)
+                if (cell.x >= bestCellFound.x)
                     continue;
 
-                lowestValFound = val;
+                bestCellFound = cell;
+            }
+
+            return bestCellFound;
+        }
+
+        private static IntVec3 GetFirstCellInColumn(IList<IntVec3> cells)
+        {
+            var bestCellFound = cells.First();
+            foreach (var cell in cells)
+            {
+                if (cell.z <= bestCellFound.z)
+                    continue;
+
                 bestCellFound = cell;
             }
 
