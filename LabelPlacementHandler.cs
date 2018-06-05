@@ -15,6 +15,8 @@ namespace LabelsOnFloor
 
         private readonly LabelMaker _labelMaker = new LabelMaker();
 
+        private readonly RoomRoleFinder _roomRoleFinder = new RoomRoleFinder();
+
         private readonly Dictionary<string, Mesh> _cachedMeshes = new Dictionary<string, Mesh>();
 
         private int _nextUpdateTick;
@@ -91,7 +93,7 @@ namespace LabelsOnFloor
             if (room == null || room.PsychologicallyOutdoors)
                 return null;
 
-            if (room.Role == RoomRoleDefOf.None || room.Role.defName == "Room")
+            if (!_roomRoleFinder.IsImportantRoom(room))
                 return null;
 
             return room;
@@ -150,6 +152,7 @@ namespace LabelsOnFloor
             return _cachedMeshes[label];
         }
 
+        // TODO: Add margins
         private Mesh CreateMeshFor(string label)
         {
             var vertices = new List<Vector3>();
