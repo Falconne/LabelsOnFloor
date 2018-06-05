@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DynamicDrawManager_DrawDynamicThings_Patch.cs" />
+    <Compile Include="EdgeFinder.cs" />
     <Compile Include="FontHandler.cs" />
     <Compile Include="LabelDrawer.cs" />
     <Compile Include="LabelHolder.cs" />
