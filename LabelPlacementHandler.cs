@@ -15,8 +15,6 @@ namespace LabelsOnFloor
 
         private readonly LabelMaker _labelMaker = new LabelMaker();
 
-        private readonly EdgeFinder _edgeFinder;
-
         private readonly Dictionary<string, Mesh> _cachedMeshes = new Dictionary<string, Mesh>();
 
         private int _nextUpdateTick;
@@ -27,7 +25,6 @@ namespace LabelsOnFloor
         {
             _labelHolder = labelHolder;
             _fontHandler = fontHandler;
-            _edgeFinder = new EdgeFinder(_map);
         }
 
         public bool IsReady()
@@ -102,10 +99,11 @@ namespace LabelsOnFloor
 
         private PlacementData GetLabelPlacementDataForRoom(Room room, int labelLength)
         {
-            return _edgeFinder.GetBestPlacementData(
+            return EdgeFinder.GetBestPlacementData(
                 room.Cells.ToList(),
                 c => false,
                 c => !_map.thingGrid.CellContains(c, ThingDefOf.Wall),
+                c => true,
                 labelLength
                 );
         }
@@ -132,9 +130,10 @@ namespace LabelsOnFloor
 
         private PlacementData GetLabelPlacementDataForZone(Zone zone, int labelLength)
         {
-            return _edgeFinder.GetBestPlacementData(
+            return EdgeFinder.GetBestPlacementData(
                 zone.Cells,
                 c => c.Fogged(_map),
+                c => true,
                 c => true,
                 labelLength
             );

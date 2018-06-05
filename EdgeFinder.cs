@@ -25,14 +25,7 @@ namespace LabelsOnFloor
 
     public class EdgeFinder
     {
-        private Map _map;
-
-        public EdgeFinder(Map map)
-        {
-            _map = map;
-        }
-
-        public PlacementData GetBestPlacementData(
+        public static PlacementData GetBestPlacementData(
             IList<IntVec3> allCells,
             Func<IntVec3, bool> shouldBailout,
             Func<IntVec3, bool> isValidCell,
@@ -123,23 +116,23 @@ namespace LabelsOnFloor
                     continue;
 
 
-                if (cell.x < lastRowIndexFound)
+                if (cell.z < lastRowIndexFound)
                 {
-                    lastRowIndexFound = cell.x;
+                    lastRowIndexFound = cell.z;
                     result.Row.Clear();
                 }
 
-                if (cell.x == lastRowIndexFound)
+                if (cell.z == lastRowIndexFound)
                     result.Row.Add(cell);
 
 
-                if (cell.z < lastColIndexFound)
+                if (cell.x < lastColIndexFound)
                 {
-                    lastColIndexFound = cell.z;
+                    lastColIndexFound = cell.x;
                     result.Column.Clear();
                 }
 
-                if (cell.z == lastColIndexFound)
+                if (cell.x == lastColIndexFound)
                     result.Column.Add(cell);
             }
 
