@@ -6,6 +6,23 @@ using Verse;
 
 namespace LabelsOnFloor
 {
+    internal class BestEdges
+    {
+        public readonly List<IntVec3> Row;
+        public readonly List<IntVec3> Column;
+
+        public BestEdges()
+        {
+            Row = new List<IntVec3>();
+            Column = new List<IntVec3>();
+        }
+
+        public bool IsValid()
+        {
+            return Row.Count > 0 && Column.Count > 0;
+        }
+    }
+
     public class EdgeFinder
     {
         private Map _map;
@@ -19,40 +36,32 @@ namespace LabelsOnFloor
             IList<IntVec3> allCells,
             Func<IntVec3, bool> shouldBailout,
             Func<IntVec3, bool> isValidCell,
+            Func<IntVec3, bool> isVisibleCell,
             int labelLength
             )
         {
-            var lastRowCells = GetEdgeCells(
+            var bestEdges = GetEdgeCells(
                 allCells,
                 shouldBailout,
-                isValidCell,
-                c => c.z
+                isValidCell
             );
 
-            if (lastRowCells == null)
-                return null;
-
-            var lastColCells = GetEdgeCells(
-                allCells,
-                shouldBailout,
-                isValidCell,
-                c => c.x
-            );
-
-            if (lastColCells == null)
+            if (bestEdges == null)
                 return null;
 
             var placementData = new PlacementData();
-            if (lastRowCells.Count < lastColCells.Count)
+            var visibleCellsInRow = bestEdges.Row.Count(isVisibleCell);
+            var visibleCellsInCol = bestEdges.Column.Count(isVisibleCell);
+            if (visibleCellsInRow < visibleCellsInCol)
             {
-                placementData.Position = GetFirstCellInColumn(lastColCells);
-                placementData.Scale = GetScalingVector(lastColCells.Count, labelLength);
+                placementData.Position = GetFirstCellInColumn(bestEdges.Column);
+                placementData.Scale = GetScalingVector(bestEdges.Column.Count, labelLength);
                 placementData.Flipped = true;
             }
             else
             {
-                placementData.Position = GetFirstCellInRow(lastRowCells);
-                placementData.Scale = GetScalingVector(lastRowCells.Count, labelLength);
+                placementData.Position = GetFirstCellInRow(bestEdges.Row);
+                placementData.Scale = GetScalingVector(bestEdges.Row.Count, labelLength);
             }
 
             return placementData;
@@ -96,15 +105,15 @@ namespace LabelsOnFloor
             return bestCellFound;
         }
 
-        private static List<IntVec3> GetEdgeCells(
+        private static BestEdges GetEdgeCells(
             IEnumerable<IntVec3> allCells,
             Func<IntVec3, bool> shouldBailout,
-            Func<IntVec3, bool> isValidCell,
-            Func<IntVec3, int> getIndexingDimensionValue
+            Func<IntVec3, bool> isValidCell
             )
         {
-            var lastIndexFound = int.MaxValue;
-            var result = new List<IntVec3>();
+            var result = new BestEdges();
+            var lastRowIndexFound = int.MaxValue;
+            var lastColIndexFound = int.MaxValue;
             foreach (var cell in allCells)
             {
                 if (shouldBailout(cell))
@@ -113,19 +122,28 @@ namespace LabelsOnFloor
                 if (!isValidCell(cell))
                     continue;
 
-                var indexingDimensionValue = getIndexingDimensionValue(cell);
-                if (indexingDimensionValue < lastIndexFound)
+
+                if (cell.x < lastRowIndexFound)
                 {
-                    lastIndexFound = indexingDimensionValue;
-                    result.Clear();
+                    lastRowIndexFound = cell.x;
+                    result.Row.Clear();
                 }
 
-                if (indexingDimensionValue == lastIndexFound)
-                    result.Add(cell);
+                if (cell.x == lastRowIndexFound)
+                    result.Row.Add(cell);
 
+
+                if (cell.z < lastColIndexFound)
+                {
+                    lastColIndexFound = cell.z;
+                    result.Column.Clear();
+                }
+
+                if (cell.z == lastColIndexFound)
+                    result.Column.Add(cell);
             }
 
-            return result.Count == 0 ? null : result;
+            return result.IsValid() ? result : null;
         }
     }
 }
