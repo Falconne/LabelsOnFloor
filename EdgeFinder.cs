@@ -8,38 +8,87 @@ namespace LabelsOnFloor
 {
     public class EdgeFinder
     {
-        public static PlacementData GetBestPlacementData(
-            IEnumerable<IntVec3> allCells,
+        private Map _map;
+
+        public EdgeFinder(Map map)
+        {
+            _map = map;
+        }
+
+        public PlacementData GetBestPlacementData(
+            IList<IntVec3> allCells,
             Func<IntVec3, bool> shouldBailout,
             Func<IntVec3, bool> isValidCell,
             int labelLength
             )
         {
-            var lastRowCellsRaw = GetEdgeCells(
+            var lastRowCells = GetEdgeCells(
                 allCells,
                 shouldBailout,
                 isValidCell,
                 c => c.z
             );
 
-            if (lastRowCellsRaw == null)
+            if (lastRowCells == null)
                 return null;
 
-            var lastRowCells = lastRowCellsRaw.ToList();
-            var scaling = (float)lastRowCells.Count / labelLength;
+            var lastColCells = GetEdgeCells(
+                allCells,
+                shouldBailout,
+                isValidCell,
+                c => c.x
+            );
+
+            if (lastColCells == null)
+                return null;
+
+
+            List<IntVec3> rangeToUse;
+            var flipped = false;
+            IntVec3 posCell;
+            if (lastRowCells.Count < lastColCells.Count)
+            {
+                rangeToUse = lastColCells;
+                posCell = GetFirstCell(rangeToUse, c => c.z);
+                flipped = true;
+            }
+            else
+            {
+                rangeToUse = lastRowCells;
+                posCell = GetFirstCell(rangeToUse, c => c.x);
+            }
+
+            var scaling = (float)rangeToUse.Count / labelLength;
             if (scaling > 1f)
                 scaling = 1f;
-            lastRowCells.Sort((c1, c2) => c1.x.CompareTo(c2.x));
 
             return new PlacementData
             {
-                Position = lastRowCells.First(),
-                Scale = new Vector3(scaling, 1f, scaling)
+                Position = posCell,
+                Scale = new Vector3(scaling, 1f, scaling),
+                Flipped = flipped
             };
 
         }
 
-        private static IEnumerable<IntVec3> GetEdgeCells(
+        private static IntVec3 GetFirstCell(IEnumerable<IntVec3> cells, Func<IntVec3, int> getValue)
+        {
+            var lowestValFound = int.MaxValue;
+            IntVec3 bestCellFound = default;
+            foreach (var cell in cells)
+            {
+                var val = getValue(cell);
+                if (val >= lowestValFound)
+                    continue;
+
+                lowestValFound = val;
+                bestCellFound = cell;
+            }
+
+            return bestCellFound;
+        }
+
+        private static List<IntVec3> GetEdgeCells(
             IEnumerable<IntVec3> allCells,
             Func<IntVec3, bool> shouldBailout,
             Func<IntVec3, bool> isValidCell,

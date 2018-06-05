@@ -32,7 +32,14 @@ namespace LabelsOnFloor
             Matrix4x4 matrix = default;
             var pos = label.LabelPlacementData.Position.ToVector3();
 
-            matrix.SetTRS(pos, Quaternion.identity, label.LabelPlacementData.Scale);
+            var rotation = Quaternion.identity;
+            if (label.LabelPlacementData.Flipped)
+            {
+                rotation = Quaternion.AngleAxis(90, Vector3.up);
+                pos.z++;
+            }
+
+            matrix.SetTRS(pos, rotation, label.LabelPlacementData.Scale);
 
             Graphics.DrawMesh(label.LabelMesh, matrix, _fontHandler.GetMaterial(), 0);
 
