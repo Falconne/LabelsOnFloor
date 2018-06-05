@@ -15,8 +15,6 @@ namespace LabelsOnFloor
 
         private readonly LabelMaker _labelMaker = new LabelMaker();
 
-        private readonly EdgeFinder _edgeFinder;
-
         private readonly Dictionary<string, Mesh> _cachedMeshes = new Dictionary<string, Mesh>();
 
         private int _nextUpdateTick;
@@ -27,7 +25,6 @@ namespace LabelsOnFloor
         {
             _labelHolder = labelHolder;
             _fontHandler = fontHandler;
-            _edgeFinder = new EdgeFinder(_map);
         }
 
         public bool IsReady()
@@ -102,28 +99,12 @@ namespace LabelsOnFloor
 
         private PlacementData GetLabelPlacementDataForRoom(Room room, int labelLength)
         {
-
-            var lastRowCellsRaw = _edgeFinder.GetEdgeCells(
+            return EdgeFinder.GetBestPlacementData(
                 room.Cells,
                 c => false,
                 c => !_map.thingGrid.CellContains(c, ThingDefOf.Wall),
-                c => c.z
+                labelLength
                 );
-
-            if (lastRowCellsRaw == null)
-                return null;
-
-            var lastRowCells = lastRowCellsRaw.ToList();
-            var scaling = (float)lastRowCells.Count / labelLength;
-            if (scaling > 1f)
-                scaling = 1f;
-            lastRowCells.Sort((c1, c2) => c1.x.CompareTo(c2.x));
-
-            return new PlacementData
-            {
-                Position = lastRowCells.First(),
-                Scale = new Vector3(scaling, 1f, scaling)
-            };
         }
 
         private void RegenerateZoneLabels()
@@ -148,36 +129,12 @@ namespace LabelsOnFloor
 
         private PlacementData GetLabelPlacementDataForZone(Zone zone, int labelLength)
         {
-            var lastRowFound = int.MaxValue;
-            var lastRowCells = new List<IntVec3>();
-            foreach (var cell in zone.Cells)
-            {
-                if (cell.Fogged(_map))
-                    return null;
-
-                if (cell.z < lastRowFound)
-                {
-                    lastRowFound = cell.z;
-                    lastRowCells.Clear();
-                }
-
-                if (cell.z == lastRowFound)
-                    lastRowCells.Add(cell);
-
-            }
-            if (lastRowCells.Count == 0)
-                return null;
-
-            var scaling = (float)lastRowCells.Count / labelLength;
-            if (scaling > 1f)
-                scaling = 1f;
-            lastRowCells.Sort((c1, c2) => c1.x.CompareTo(c2.x));
-
-            return new PlacementData
-            {
-                Position = lastRowCells.First(),
-                Scale = new Vector3(scaling, 1f, scaling)
-            };
+            return EdgeFinder.GetBestPlacementData(
+                zone.Cells,
+                c => c.Fogged(_map),
+                c => true,
+                labelLength
+            );
         }
 
 
