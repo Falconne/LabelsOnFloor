@@ -8,7 +8,7 @@ namespace LabelsOnFloor
     {
         public IntVec3 Position;
         public Vector3 Scale;
-        public bool Flipped;
+        public bool Flipped = false;
     }
 
     public class Label

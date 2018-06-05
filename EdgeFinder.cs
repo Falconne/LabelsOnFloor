@@ -42,32 +42,29 @@ namespace LabelsOnFloor
             if (lastColCells == null)
                 return null;
 
-
-            List<IntVec3> rangeToUse;
-            var flipped = false;
-            IntVec3 posCell;
+            var placementData = new PlacementData();
             if (lastRowCells.Count < lastColCells.Count)
             {
-                rangeToUse = lastColCells;
-                posCell = GetFirstCell(rangeToUse, c => c.z);
-                flipped = true;
+                placementData.Position = GetFirstCell(lastColCells, c => c.z);
+                placementData.Scale = GetScalingVector(lastColCells.Count, labelLength);
+                placementData.Flipped = true;
             }
             else
             {
-                rangeToUse = lastRowCells;
-                posCell = GetFirstCell(rangeToUse, c => c.x);
+                placementData.Position = GetFirstCell(lastRowCells, c => c.x);
+                placementData.Scale = GetScalingVector(lastRowCells.Count, labelLength);
             }
 
-            var scaling = (float)rangeToUse.Count / labelLength;
+            return placementData;
+        }
+
+        private static Vector3 GetScalingVector(int cellCount, int labelLength)
+        {
+            var scaling = (float)cellCount / labelLength;
             if (scaling > 1f)
                 scaling = 1f;
 
-            return new PlacementData
-            {
-                Position = posCell,
-                Scale = new Vector3(scaling, 1f, scaling),
-                Flipped = flipped
-            };
+            return new Vector3(scaling, 1f, scaling);
 
         }
 
@@ -117,7 +114,7 @@ namespace LabelsOnFloor
 
             }
 
-            return result.Count == 0 ? null: result;
+            return result.Count == 0 ? null : result;
         }
     }
 }
