@@ -9,15 +9,13 @@ namespace LabelsOnFloor
 {
     public class LabelPlacementHandler
     {
-        private readonly FontHandler _fontHandler;
-
         private readonly LabelHolder _labelHolder;
 
         private readonly LabelMaker _labelMaker = new LabelMaker();
 
         private readonly RoomRoleFinder _roomRoleFinder = new RoomRoleFinder();
 
-        private readonly Dictionary<string, Mesh> _cachedMeshes = new Dictionary<string, Mesh>();
+        private readonly MeshHandler _meshHandler;
 
         private int _nextUpdateTick;
 
@@ -26,12 +24,7 @@ namespace LabelsOnFloor
         public LabelPlacementHandler(LabelHolder labelHolder, FontHandler fontHandler)
         {
             _labelHolder = labelHolder;
-            _fontHandler = fontHandler;
-        }
-
-        public bool IsReady()
-        {
-            return _fontHandler.IsFontLoaded();
+            _meshHandler = new MeshHandler(fontHandler);
         }
 
         public void RegenerateIfNeeded()
@@ -64,12 +57,12 @@ namespace LabelsOnFloor
                 var text = _labelMaker.GetRoomLabel(room);
                 var label = new Label()
                 {
-                    LabelMesh = GetMeshFor(text),
+                    LabelMesh = _meshHandler.GetMeshFor(text),
                     LabelPlacementData = 
                         roomPlacementDataFinder.GetLabelPlacementDataForRoom(room, text.Length)
                 };
 
-                if (label.LabelPlacementData != null)
+                if (label.IsValid())
                     _labelHolder.Add(label);
             }
         }
@@ -85,7 +78,7 @@ namespace LabelsOnFloor
 
                 var label = new Label()
                 {
-                    LabelMesh = GetMeshFor(text),
+                    LabelMesh = _meshHandler.GetMeshFor(text),
                     LabelPlacementData = GetLabelPlacementDataForZone(zone, text.Length)
                 };
 
@@ -104,67 +97,5 @@ namespace LabelsOnFloor
                 labelLength
             );
         }
-
-
-        private Mesh GetMeshFor(string label)
-        {
-            if (!_cachedMeshes.ContainsKey(label))
-            {
-                _cachedMeshes[label] = CreateMeshFor(label);
-            }
-
-            return _cachedMeshes[label];
-        }
-
-        private Mesh CreateMeshFor(string label)
-        {
-            var vertices = new List<Vector3>();
-            var uvMap = new List<Vector2>();
-            var triangles = new List<int>();
-            var size = new Vector2
-            {
-                x = 1f,
-                y = 2f
-            };
-
-            var boundsInTexture = _fontHandler.GetBoundsInTextureFor(label);
-            var startingTriangleVertex = 0;
-            var startingVertexXOffset = 0f;
-            var yTop = size.y - 0.4f;
-            foreach (var charBoundsInTexture in boundsInTexture)
-            {
-                vertices.Add(new Vector3(startingVertexXOffset, 0f, -0.4f));
-                vertices.Add(new Vector3(startingVertexXOffset, 0f, yTop));
-                vertices.Add(new Vector3(startingVertexXOffset + size.x, 0f, yTop));
-                vertices.Add(new Vector3(startingVertexXOffset + size.x, 0f, -0.4f));
-                startingVertexXOffset += size.x;
-
-                uvMap.Add(new Vector2(charBoundsInTexture.Left, 0f));
-                uvMap.Add(new Vector2(charBoundsInTexture.Left, 1f));
-                uvMap.Add(new Vector2(charBoundsInTexture.Right, 1f));
-                uvMap.Add(new Vector2(charBoundsInTexture.Right, 0f));
-
-                triangles.Add(startingTriangleVertex + 0);
-                triangles.Add(startingTriangleVertex + 1);
-                triangles.Add(startingTriangleVertex + 2);
-                triangles.Add(startingTriangleVertex + 0);
-                triangles.Add(startingTriangleVertex + 2);
-                triangles.Add(startingTriangleVertex + 3);
-                startingTriangleVertex += 4;
-            }
-
-            var mesh = new Mesh
-            {
-                name = "NewPlaneMesh()",
-                vertices = vertices.ToArray(),
-                uv = uvMap.ToArray()
-            };
-            mesh.SetTriangles(triangles, 0);
-            mesh.RecalculateNormals();
-            mesh.RecalculateBounds();
-
-            return mesh;
-        }
-
     }
 }

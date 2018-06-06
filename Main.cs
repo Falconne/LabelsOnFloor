@@ -42,9 +42,6 @@ namespace LabelsOnFloor
                 return;
             }
 
-            if (!_labelPlacementHandler.IsReady())
-                return;
-
             _labelPlacementHandler.RegenerateIfNeeded();
             _labelDrawer.Draw();
 

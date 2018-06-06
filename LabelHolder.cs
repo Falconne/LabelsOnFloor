@@ -15,6 +15,11 @@ namespace LabelsOnFloor
     {
         public Mesh LabelMesh;
         public PlacementData LabelPlacementData;
+
+        public bool IsValid()
+        {
+            return LabelPlacementData != null && LabelMesh != null;
+        }
     }
 
     public class LabelHolder
