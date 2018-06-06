@@ -61,11 +61,8 @@ namespace LabelsOnFloor
             // Room roles are defined by buildings, so only need to check rooms with buildings
             foreach (var building in listerBuildings.allBuildingsColonist)
             {
-                var room = GetRoomContainingBuildingIfRelevant(building);
+                var room = GetRoomContainingBuildingIfRelevant(building, r => foundRooms.Contains(r));
                 if (room == null)
-                    continue;
-
-                if (foundRooms.Contains(room))
                     continue;
 
                 foundRooms.Add(room);
@@ -83,7 +80,7 @@ namespace LabelsOnFloor
         }
 
         // Filter for indoor rooms with a role
-        private Room GetRoomContainingBuildingIfRelevant(Building building)
+        private Room GetRoomContainingBuildingIfRelevant(Building building, Func<Room, bool> isAlreadyFound)
         {
             if (building.Faction != Faction.OfPlayer)
                 return null;
@@ -92,7 +89,7 @@ namespace LabelsOnFloor
                 return null;
 
             var room = building.Position.GetRoom(_map);
-            if (room == null || room.PsychologicallyOutdoors)
+            if (room == null || isAlreadyFound(room) || room.PsychologicallyOutdoors)
                 return null;
 
             if (!_roomRoleFinder.IsImportantRoom(room))
@@ -154,9 +151,6 @@ namespace LabelsOnFloor
                 x = 1f,
                 y = 2f
             };
-
-            Main.Instance.Logger.Message($"Mesh for: {label}");
-
 
             var boundsInTexture = _fontHandler.GetBoundsInTextureFor(label);
             var startingTriangleVertex = 0;
