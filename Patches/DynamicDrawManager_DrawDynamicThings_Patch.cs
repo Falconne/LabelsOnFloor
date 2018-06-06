@@ -8,7 +8,7 @@ namespace LabelsOnFloor
     {
         static bool Prefix(ref DynamicDrawManager __instance)
         {
-            Main.Instance.Draw();
+            Main.Instance?.Draw();
 
             return true;
         }

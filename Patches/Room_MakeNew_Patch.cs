@@ -8,8 +8,7 @@ namespace LabelsOnFloor
     {
         static void Postfix()
         {
-            Main.Instance.Logger.Message("Room added");
-            Main.Instance.SetDirty();
+            Main.Instance?.SetDirty();
         }
 
     }

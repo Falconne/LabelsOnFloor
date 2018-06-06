@@ -27,7 +27,10 @@ namespace LabelsOnFloor
         public Main()
         {
             Instance = this;
-            _labelPlacementHandler = new LabelPlacementHandler(_labelHolder, _fontHandler);
+            _labelPlacementHandler = new LabelPlacementHandler(
+                _labelHolder, 
+                new MeshHandler(_fontHandler));
+
             _labelDrawer = new LabelDrawer(_labelHolder, _fontHandler);
         }
 

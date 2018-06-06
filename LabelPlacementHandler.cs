@@ -16,10 +16,10 @@ namespace LabelsOnFloor
 
         private Map _map;
 
-        public LabelPlacementHandler(LabelHolder labelHolder, FontHandler fontHandler)
+        public LabelPlacementHandler(LabelHolder labelHolder, MeshHandler meshHandler)
         {
             _labelHolder = labelHolder;
-            _meshHandler = new MeshHandler(fontHandler);
+            _meshHandler = meshHandler;
         }
 
         public void SetDirty()
