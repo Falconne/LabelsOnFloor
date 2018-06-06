@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using Harmony;
-using UnityEngine;
+﻿using Harmony;
 using Verse;
 
 namespace LabelsOnFloor

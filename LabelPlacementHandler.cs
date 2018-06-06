@@ -22,6 +22,11 @@ namespace LabelsOnFloor
             _meshHandler = new MeshHandler(fontHandler);
         }
 
+        public void SetDirty()
+        {
+            _nextUpdateTick = 0;
+        }
+
         public void RegenerateIfNeeded()
         {
             var tick = Find.TickManager.TicksGame;
@@ -67,7 +72,6 @@ namespace LabelsOnFloor
             foreach (var zone in _map.zoneManager.AllZones)
             {
                 var text = _labelMaker.GetZoneLabel(zone);
-                Main.Instance.Logger.Message($"Got zone: {text}");
                 if (string.IsNullOrEmpty(text))
                     continue;
 

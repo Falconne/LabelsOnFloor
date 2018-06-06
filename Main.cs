@@ -31,6 +31,11 @@ namespace LabelsOnFloor
             _labelDrawer = new LabelDrawer(_labelHolder, _fontHandler);
         }
 
+        public void SetDirty()
+        {
+            _labelPlacementHandler?.SetDirty();
+        }
+        
         public void Draw()
         {
             if (!_enabled)
