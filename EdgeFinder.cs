@@ -62,7 +62,7 @@ namespace LabelsOnFloor
 
         private static Vector3 GetScalingVector(int cellCount, int labelLength)
         {
-            var scaling = (float)cellCount / labelLength;
+            var scaling = (cellCount - 0.4f) / labelLength;
             if (scaling > 1f)
                 scaling = 1f;
 

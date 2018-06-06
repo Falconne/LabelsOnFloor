@@ -116,7 +116,6 @@ namespace LabelsOnFloor
             return _cachedMeshes[label];
         }
 
-        // TODO: Add margins
         private Mesh CreateMeshFor(string label)
         {
             var vertices = new List<Vector3>();

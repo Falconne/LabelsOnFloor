@@ -31,12 +31,18 @@ namespace LabelsOnFloor
         {
             Matrix4x4 matrix = default;
             var pos = label.LabelPlacementData.Position.ToVector3();
+            pos.x += 0.2f;
 
             var rotation = Quaternion.identity;
             if (label.LabelPlacementData.Flipped)
             {
                 rotation = Quaternion.AngleAxis(90, Vector3.up);
                 pos.z++;
+                pos.z -= 0.2f;
+            }
+            else
+            {
+                pos.z += 0.2f;
             }
 
             matrix.SetTRS(pos, rotation, label.LabelPlacementData.Scale);
