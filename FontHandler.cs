@@ -31,7 +31,7 @@ namespace LabelsOnFloor
             if (_material == null)
             {
                 var color = Color.white;
-                color.a = 0.80f;
+                color.a = 0.40f;
                 _material = MaterialPool.MatFrom(Resources.Font, ShaderDatabase.Transparent, color);
             }
 

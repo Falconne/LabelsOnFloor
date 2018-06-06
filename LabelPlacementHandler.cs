@@ -55,6 +55,7 @@ namespace LabelsOnFloor
 
         private void RegenerateRoomLabels()
         {
+            var roomPlacementDataFinder = new RoomPlacementDataFinder(_map);
             var foundRooms = new HashSet<Room>();
             var listerBuildings = _map.listerBuildings;
             // Room roles are defined by buildings, so only need to check rooms with buildings
@@ -72,7 +73,8 @@ namespace LabelsOnFloor
                 var label = new Label()
                 {
                     LabelMesh = GetMeshFor(text),
-                    LabelPlacementData = GetLabelPlacementDataForRoom(room, text.Length)
+                    LabelPlacementData = 
+                        roomPlacementDataFinder.GetLabelPlacementDataForRoom(room, text.Length)
                 };
 
                 if (label.LabelPlacementData != null)
@@ -97,17 +99,6 @@ namespace LabelsOnFloor
                 return null;
 
             return room;
-        }
-
-        private PlacementData GetLabelPlacementDataForRoom(Room room, int labelLength)
-        {
-            return EdgeFinder.GetBestPlacementData(
-                room.Cells.ToList(),
-                c => false,
-                c => !_map.thingGrid.CellContains(c, ThingDefOf.Wall),
-                c => true,
-                labelLength
-                );
         }
 
         private void RegenerateZoneLabels()
