@@ -56,16 +56,11 @@ namespace LabelsOnFloor
         private void RegenerateRoomLabels()
         {
             var roomPlacementDataFinder = new RoomPlacementDataFinder(_map);
-            var foundRooms = new HashSet<Room>();
-            var listerBuildings = _map.listerBuildings;
-            // Room roles are defined by buildings, so only need to check rooms with buildings
-            foreach (var building in listerBuildings.allBuildingsColonist)
+            foreach (var room in _map.regionGrid.allRooms)
             {
-                var room = GetRoomContainingBuildingIfRelevant(building, r => foundRooms.Contains(r));
-                if (room == null)
+                if (room == null || room.Fogged || !_roomRoleFinder.IsImportantRoom(room))
                     continue;
 
-                foundRooms.Add(room);
                 var text = _labelMaker.GetRoomLabel(room);
                 var label = new Label()
                 {
@@ -77,25 +72,6 @@ namespace LabelsOnFloor
                 if (label.LabelPlacementData != null)
                     _labelHolder.Add(label);
             }
-        }
-
-        // Filter for indoor rooms with a role
-        private Room GetRoomContainingBuildingIfRelevant(Building building, Func<Room, bool> isAlreadyFound)
-        {
-            if (building.Faction != Faction.OfPlayer)
-                return null;
-
-            if (building.Position.Fogged(_map))
-                return null;
-
-            var room = building.Position.GetRoom(_map);
-            if (room == null || isAlreadyFound(room) || room.PsychologicallyOutdoors)
-                return null;
-
-            if (!_roomRoleFinder.IsImportantRoom(room))
-                return null;
-
-            return room;
         }
 
         private void RegenerateZoneLabels()
