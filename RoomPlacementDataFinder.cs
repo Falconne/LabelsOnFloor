@@ -26,7 +26,7 @@ namespace LabelsOnFloor
                 room.Cells.ToList(),
                 c => false,
                 c => !_map.thingGrid.CellContains(c, ThingDefOf.Wall),
-                c => IsCellVisible(c),
+                IsCellVisible,
                 labelLength
             );
         }

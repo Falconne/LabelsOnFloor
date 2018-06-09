@@ -8,6 +8,8 @@ namespace LabelsOnFloor
     public class Main : HugsLib.ModBase
     {
 
+        public readonly LabelPlacementHandler LabelPlacementHandler;
+
         internal new ModLogger Logger => base.Logger;
 
         internal static Main Instance { get; private set; }
@@ -18,8 +20,6 @@ namespace LabelsOnFloor
 
         private readonly LabelHolder _labelHolder = new LabelHolder();
         
-        private readonly LabelPlacementHandler _labelPlacementHandler;
-
         private readonly LabelDrawer _labelDrawer;
 
         private readonly FontHandler _fontHandler = new FontHandler();
@@ -27,41 +27,39 @@ namespace LabelsOnFloor
         public Main()
         {
             Instance = this;
-            _labelPlacementHandler = new LabelPlacementHandler(
+            LabelPlacementHandler = new LabelPlacementHandler(
                 _labelHolder, 
                 new MeshHandler(_fontHandler));
 
             _labelDrawer = new LabelDrawer(_labelHolder, _fontHandler);
         }
 
-        public void SetDirty()
-        {
-            _labelPlacementHandler?.SetDirty();
-        }
-        
         public void Draw()
         {
-            if (!_enabled)
-            {
-                _labelPlacementHandler.Ready = false;
-                return;
-            }
-
-            if (Current.ProgramState != ProgramState.Playing || Find.VisibleMap == null
+            if (!_enabled 
+                || Current.ProgramState != ProgramState.Playing
+                || Find.VisibleMap == null
                 || WorldRendererUtility.WorldRenderedNow)
             {
-                _labelPlacementHandler.Ready = false;
+                LabelPlacementHandler.Ready = false;
                 return;
             }
 
-            _labelPlacementHandler.RegenerateIfNeeded();
+            LabelPlacementHandler.RegenerateIfNeeded();
             _labelDrawer.Draw();
 
         }
 
+        public override void OnGUI()
+        {
+            base.OnGUI();
+            if (WorldRendererUtility.WorldRenderedNow && LabelPlacementHandler != null)
+                LabelPlacementHandler.Ready = false;
+        }
+
         public override void WorldLoaded()
         {
-            SetDirty();
+            LabelPlacementHandler.Ready = false;
         }
 
         public override void DefsLoaded()

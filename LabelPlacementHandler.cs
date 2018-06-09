@@ -1,4 +1,5 @@
-﻿using Verse;
+﻿using System.Linq;
+using Verse;
 
 namespace LabelsOnFloor
 {
@@ -11,11 +12,8 @@ namespace LabelsOnFloor
             set
             {
                 _ready = value;
-                if (_ready)
-                    return;
-
-                SetDirty();
-                _labelHolder.Clear();
+                if (!_ready)
+                    _labelHolder.Clear();
             }
         }
 
@@ -28,8 +26,6 @@ namespace LabelsOnFloor
         private readonly MeshHandler _meshHandler;
 
 
-        private int _nextUpdateTick;
-
         private Map _map;
         private bool _ready;
 
@@ -39,65 +35,38 @@ namespace LabelsOnFloor
             _meshHandler = meshHandler;
         }
 
-        public void SetDirty()
-        {
-            _labelHolder.Clear();
-            _nextUpdateTick = 0;
-        }
-
         public void RegenerateIfNeeded()
         {
-            var tick = Find.TickManager.TicksGame;
-            if (_map == Find.VisibleMap && tick < _nextUpdateTick)
+            if (_map == Find.VisibleMap && Ready)
                 return;
 
-            _nextUpdateTick = tick + 200;
-            Regenerate();
-        }
-
-        private void Regenerate()
-        {
             _map = Find.VisibleMap;
             _labelHolder.Clear();
+            _ready = true;
 
             RegenerateRoomLabels();
             RegenerateZoneLabels();
         }
 
-        private void RegenerateRoomLabels()
+        public void AddRoom(Room room, RoomPlacementDataFinder roomPlacementDataFinder)
         {
-            var roomPlacementDataFinder = new RoomPlacementDataFinder(_map);
-            foreach (var room in _map.regionGrid.allRooms)
-            {
-                if (room == null || room.Fogged || !_roomRoleFinder.IsImportantRoom(room))
-                    continue;
-
-                var text = _labelMaker.GetRoomLabel(room);
-                var label = new Label()
-                {
-                    LabelMesh = _meshHandler.GetMeshFor(text),
-                    LabelPlacementData = 
-                        roomPlacementDataFinder.GetLabelPlacementDataForRoom(room, text.Length),
-                    AssociatedObject = room
-                };
-
-                if (label.IsValid())
-                    _labelHolder.Add(label);
-            }
-        }
-
-        public void AddRoom(Room room)
-        {
-            if (!Ready)
+            if (!Ready || room == null)
                 return;
 
-            if (room == null || room.Fogged || !_roomRoleFinder.IsImportantRoom(room))
+            _labelHolder.RemoveLabelForObject(room);
+
+            if (room.Fogged || !_roomRoleFinder.IsImportantRoom(room))
                 return;
 
             if (room.Map != _map)
                 return;
 
             var text = _labelMaker.GetRoomLabel(room);
+            if (roomPlacementDataFinder == null)
+            {
+                roomPlacementDataFinder = new RoomPlacementDataFinder(_map);
+            }
+
             var label = new Label()
             {
                 LabelMesh = _meshHandler.GetMeshFor(text),
@@ -111,23 +80,43 @@ namespace LabelsOnFloor
 
         }
 
+        public void AddZone(Zone zone)
+        {
+            if (!Ready || zone == null)
+                return;
+
+            _labelHolder.RemoveLabelForObject(zone);
+
+            var text = _labelMaker.GetZoneLabel(zone);
+            if (string.IsNullOrEmpty(text))
+                return;
+
+            var label = new Label()
+            {
+                LabelMesh = _meshHandler.GetMeshFor(text),
+                LabelPlacementData = GetLabelPlacementDataForZone(zone, text.Length),
+                AssociatedObject = zone
+            };
+
+            if (label.LabelPlacementData != null)
+                _labelHolder.Add(label);
+
+        }
+
+        private void RegenerateRoomLabels()
+        {
+            var roomPlacementDataFinder = new RoomPlacementDataFinder(_map);
+            foreach (var room in _map.regionGrid.allRooms)
+            {
+                AddRoom(room, roomPlacementDataFinder);
+            }
+        }
+
         private void RegenerateZoneLabels()
         {
             foreach (var zone in _map.zoneManager.AllZones)
             {
-                var text = _labelMaker.GetZoneLabel(zone);
-                if (string.IsNullOrEmpty(text))
-                    continue;
-
-                var label = new Label()
-                {
-                    LabelMesh = _meshHandler.GetMeshFor(text),
-                    LabelPlacementData = GetLabelPlacementDataForZone(zone, text.Length),
-                    AssociatedObject = zone
-                };
-
-                if (label.LabelPlacementData != null)
-                    _labelHolder.Add(label);
+                AddZone(zone);
             }
         }
 

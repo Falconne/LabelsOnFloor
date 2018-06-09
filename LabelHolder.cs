@@ -37,6 +37,11 @@ namespace LabelsOnFloor
             _currentLabels.Add(label);
         }
 
+        public void RemoveLabelForObject(object objectToRemove)
+        {
+            _currentLabels.RemoveAll(l => l.AssociatedObject == objectToRemove);
+        }
+
         public IEnumerable<Label> GetLabels()
         {
             return _currentLabels;
