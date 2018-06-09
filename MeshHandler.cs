@@ -17,6 +17,9 @@ namespace LabelsOnFloor
 
         public Mesh GetMeshFor(string label)
         {
+            if (string.IsNullOrEmpty(label))
+                return null;
+
             if (!_fontHandler.IsFontLoaded())
                 return null;
 

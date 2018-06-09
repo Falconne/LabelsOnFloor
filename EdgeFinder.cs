@@ -33,6 +33,9 @@ namespace LabelsOnFloor
             int labelLength
             )
         {
+            if (labelLength == 0)
+                return null;
+
             var bestEdges = GetEdgeCells(
                 allCells,
                 shouldBailout,

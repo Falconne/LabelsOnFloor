@@ -20,7 +20,7 @@ namespace LabelsOnFloor
             }
         }
 
-        public PlacementData GetLabelPlacementDataForRoom(Room room, int labelLength)
+        public PlacementData GetData(Room room, int labelLength)
         {
             return EdgeFinder.GetBestPlacementData(
                 room.Cells.ToList(),

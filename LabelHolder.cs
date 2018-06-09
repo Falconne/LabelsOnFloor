@@ -15,11 +15,11 @@ namespace LabelsOnFloor
     {
         public Mesh LabelMesh;
         public PlacementData LabelPlacementData;
-        public object AssociatedObject;
+        public object AssociatedArea;
 
         public bool IsValid()
         {
-            return LabelPlacementData != null && LabelMesh != null && AssociatedObject != null;
+            return LabelPlacementData != null && LabelMesh != null && AssociatedArea != null;
         }
     }
 
@@ -37,9 +37,9 @@ namespace LabelsOnFloor
             _currentLabels.Add(label);
         }
 
-        public void RemoveLabelForObject(object objectToRemove)
+        public void RemoveLabelForArea(object area)
         {
-            _currentLabels.RemoveAll(l => l.AssociatedObject == objectToRemove);
+            _currentLabels.RemoveAll(l => l.AssociatedArea == area);
         }
 
         public IEnumerable<Label> GetLabels()
