@@ -4,6 +4,21 @@ namespace LabelsOnFloor
 {
     public class LabelPlacementHandler
     {
+        public bool Ready
+        {
+            get => _ready;
+
+            set
+            {
+                _ready = value;
+                if (_ready)
+                    return;
+
+                SetDirty();
+                _labelHolder.Clear();
+            }
+        }
+
         private readonly LabelHolder _labelHolder;
 
         private readonly LabelMaker _labelMaker = new LabelMaker();
@@ -12,9 +27,11 @@ namespace LabelsOnFloor
 
         private readonly MeshHandler _meshHandler;
 
+
         private int _nextUpdateTick;
 
         private Map _map;
+        private bool _ready;
 
         public LabelPlacementHandler(LabelHolder labelHolder, MeshHandler meshHandler)
         {
@@ -24,6 +41,7 @@ namespace LabelsOnFloor
 
         public void SetDirty()
         {
+            _labelHolder.Clear();
             _nextUpdateTick = 0;
         }
 
@@ -59,12 +77,38 @@ namespace LabelsOnFloor
                 {
                     LabelMesh = _meshHandler.GetMeshFor(text),
                     LabelPlacementData = 
-                        roomPlacementDataFinder.GetLabelPlacementDataForRoom(room, text.Length)
+                        roomPlacementDataFinder.GetLabelPlacementDataForRoom(room, text.Length),
+                    AssociatedObject = room
                 };
 
                 if (label.IsValid())
                     _labelHolder.Add(label);
             }
+        }
+
+        public void AddRoom(Room room)
+        {
+            if (!Ready)
+                return;
+
+            if (room == null || room.Fogged || !_roomRoleFinder.IsImportantRoom(room))
+                return;
+
+            if (room.Map != _map)
+                return;
+
+            var text = _labelMaker.GetRoomLabel(room);
+            var label = new Label()
+            {
+                LabelMesh = _meshHandler.GetMeshFor(text),
+                LabelPlacementData = 
+                    roomPlacementDataFinder.GetLabelPlacementDataForRoom(room, text.Length),
+                AssociatedObject = room
+            };
+
+            if (label.IsValid())
+                _labelHolder.Add(label);
+
         }
 
         private void RegenerateZoneLabels()
@@ -78,7 +122,8 @@ namespace LabelsOnFloor
                 var label = new Label()
                 {
                     LabelMesh = _meshHandler.GetMeshFor(text),
-                    LabelPlacementData = GetLabelPlacementDataForZone(zone, text.Length)
+                    LabelPlacementData = GetLabelPlacementDataForZone(zone, text.Length),
+                    AssociatedObject = zone
                 };
 
                 if (label.LabelPlacementData != null)

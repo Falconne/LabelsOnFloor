@@ -42,11 +42,15 @@ namespace LabelsOnFloor
         public void Draw()
         {
             if (!_enabled)
+            {
+                _labelPlacementHandler.Ready = false;
                 return;
+            }
 
             if (Current.ProgramState != ProgramState.Playing || Find.VisibleMap == null
                 || WorldRendererUtility.WorldRenderedNow)
             {
+                _labelPlacementHandler.Ready = false;
                 return;
             }
 
@@ -57,7 +61,7 @@ namespace LabelsOnFloor
 
         public override void WorldLoaded()
         {
-            _labelHolder.Clear();
+            SetDirty();
         }
 
         public override void DefsLoaded()
