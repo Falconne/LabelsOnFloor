@@ -5,13 +5,13 @@ using Verse;
 
 namespace LabelsOnFloor
 {
-    public class RoomPlacementDataFinder
+    public class PlacementDataFinderForRooms
     {
         private readonly List<IntVec3> _blockedCells = new List<IntVec3>();
 
         private readonly Map _map;
 
-        public RoomPlacementDataFinder(Map map)
+        public PlacementDataFinderForRooms(Map map)
         {
             _map = map;
             foreach (var building in map.listerBuildings.allBuildingsColonist)

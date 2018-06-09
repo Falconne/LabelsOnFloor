@@ -48,7 +48,7 @@ namespace LabelsOnFloor
             RegenerateZoneLabels();
         }
 
-        public void AddRoom(Room room, RoomPlacementDataFinder roomPlacementDataFinder)
+        public void AddRoom(Room room, PlacementDataFinderForRooms placementDataFinderForRooms)
         {
             if (!Ready || room == null)
                 return;
@@ -62,16 +62,16 @@ namespace LabelsOnFloor
                 return;
 
             var text = _labelMaker.GetRoomLabel(room);
-            if (roomPlacementDataFinder == null)
+            if (placementDataFinderForRooms == null)
             {
-                roomPlacementDataFinder = new RoomPlacementDataFinder(_map);
+                placementDataFinderForRooms = new PlacementDataFinderForRooms(_map);
             }
 
             var label = new Label()
             {
                 LabelMesh = _meshHandler.GetMeshFor(text),
                 LabelPlacementData = 
-                    roomPlacementDataFinder.GetLabelPlacementDataForRoom(room, text.Length),
+                    placementDataFinderForRooms.GetLabelPlacementDataForRoom(room, text.Length),
                 AssociatedObject = room
             };
 
@@ -105,7 +105,7 @@ namespace LabelsOnFloor
 
         private void RegenerateRoomLabels()
         {
-            var roomPlacementDataFinder = new RoomPlacementDataFinder(_map);
+            var roomPlacementDataFinder = new PlacementDataFinderForRooms(_map);
             foreach (var room in _map.regionGrid.allRooms)
             {
                 AddRoom(room, roomPlacementDataFinder);
