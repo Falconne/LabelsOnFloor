@@ -13,10 +13,11 @@ namespace LabelsOnFloor
         private readonly RoomRoleFinder _roomRoleFinder = new RoomRoleFinder();
 
         private readonly MeshHandler _meshHandler;
-
-
+        
         private Map _map;
+
         private bool _ready;
+
 
         public LabelPlacementHandler(LabelHolder labelHolder, MeshHandler meshHandler)
         {
