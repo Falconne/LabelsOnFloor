@@ -49,7 +49,12 @@ namespace LabelsOnFloor
             RegenerateZoneLabels();
         }
 
-        public void AddRoom(Room room, PlacementDataFinderForRooms placementDataFinderForRooms)
+        public void AddOrUpdateRoom(Room room)
+        {
+            AddOrUpdateRoom(room, null);
+        }
+
+        public void AddOrUpdateRoom(Room room, PlacementDataFinderForRooms placementDataFinderForRooms)
         {
             if (!Ready || room == null)
                 return;
@@ -69,7 +74,7 @@ namespace LabelsOnFloor
             AddLabelForArea(room, text, () => placementDataFinderForRooms.GetData(room, text.Length));
         }
 
-        public void AddZone(Zone zone)
+        public void AddOrUpdateZone(Zone zone)
         {
             if (!Ready || zone == null)
                 return;
@@ -104,7 +109,7 @@ namespace LabelsOnFloor
             var roomPlacementDataFinder = new PlacementDataFinderForRooms(_map);
             foreach (var room in _map.regionGrid.allRooms)
             {
-                AddRoom(room, roomPlacementDataFinder);
+                AddOrUpdateRoom(room, roomPlacementDataFinder);
             }
         }
 
@@ -112,7 +117,7 @@ namespace LabelsOnFloor
         {
             foreach (var zone in _map.zoneManager.AllZones)
             {
-                AddZone(zone);
+                AddOrUpdateZone(zone);
             }
         }
 
