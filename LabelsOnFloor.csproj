@@ -66,6 +66,8 @@
     <Compile Include="Patches\Room_RemoveRegion_Patch.cs" />
     <Compile Include="Patches\ZoneManager_DeregisterZone_Patch.cs" />
     <Compile Include="Patches\ZoneManager_RegisterZone_Patch.cs" />
+    <Compile Include="Patches\Zone_RemoveCell_Patch.cs" />
+    <Compile Include="Patches\Zone_AddCell_Patch.cs" />
     <Compile Include="PlacementDataFinderForZones.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.cs" />
