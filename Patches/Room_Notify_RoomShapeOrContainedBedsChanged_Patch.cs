@@ -8,7 +8,7 @@ namespace LabelsOnFloor
     {
         static void Postfix(ref Room __instance)
         {
-            Main.Instance?.LabelPlacementHandler?.AddOrUpdateRoom(__instance);
+            Main.Instance?.LabelPlacementHandler?.SetDirtyIfAreaIsOnMap(__instance.Map);
         }
     }
 }

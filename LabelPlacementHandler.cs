@@ -59,7 +59,7 @@ namespace LabelsOnFloor
             if (building.Map != _map)
                 return;
 
-
+            AddOrUpdateRoom(building.GetRoom());
         }
 
         public void AddOrUpdateRoom(Room room, PlacementDataFinderForRooms placementDataFinderForRooms)

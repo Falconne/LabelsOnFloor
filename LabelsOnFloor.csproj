@@ -56,10 +56,11 @@
     <Compile Include="LabelPlacementHandler.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="MeshHandler.cs" />
+    <Compile Include="Patches\ListerBuildings_Add_Patch.cs" />
+    <Compile Include="Patches\ListerBuildings_Remove_Patch.cs" />
     <Compile Include="Patches\Room_MakeNew_Patch.cs" />
     <Compile Include="Patches\Room_Notify_BedTypeChanged_Patch.cs" />
     <Compile Include="Patches\Room_Notify_RoomShapeOrContainedBedsChanged_Patch.cs" />
-    <Compile Include="Patches\Room_RemoveRegion_Patch.cs" />
     <Compile Include="PlacementDataFinderForZones.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.cs" />

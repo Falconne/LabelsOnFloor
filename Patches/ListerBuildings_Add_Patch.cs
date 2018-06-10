@@ -3,10 +3,10 @@ using Verse;
 
 namespace LabelsOnFloor
 {
-    [HarmonyPatch(typeof(Room), "RemoveRegion")]
-    public class Room_RemoveRegion_Patch
+    [HarmonyPatch(typeof(ListerBuildings), "Add")]
+    public class ListerBuildings_Add_Patch
     {
-        static void Postfix(ref Room __instance)
+        static void Postfix(ref Building b)
         {
             Main.Instance?.LabelPlacementHandler?.SetDirty();
         }
