@@ -54,17 +54,6 @@ namespace LabelsOnFloor
             AddOrUpdateRoom(room, null);
         }
 
-        public void AddOrUpdateRoomnContainingBuilding(Building building)
-        {
-            if (!Main.Instance.ShowRoomNames())
-                return;
-
-            if (building.Map != _map)
-                return;
-
-            AddOrUpdateRoom(building.GetRoom());
-        }
-
         public void AddOrUpdateRoom(Room room, PlacementDataFinderForRooms placementDataFinderForRooms)
         {
             if (!Main.Instance.ShowRoomNames())
