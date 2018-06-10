@@ -56,6 +56,8 @@
     <Compile Include="LabelPlacementHandler.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="MeshHandler.cs" />
+    <Compile Include="Patches\GatherSpotLister_RegisterActivated_Patch.cs" />
+    <Compile Include="Patches\GatherSpotLister_RegisterDeactivated_Patch.cs" />
     <Compile Include="Patches\ListerBuildings_Add_Patch.cs" />
     <Compile Include="Patches\ListerBuildings_Remove_Patch.cs" />
     <Compile Include="Patches\Room_MakeNew_Patch.cs" />
