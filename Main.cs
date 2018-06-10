@@ -19,7 +19,7 @@ namespace LabelsOnFloor
         private SettingHandle<bool> _enabled;
 
         private readonly LabelHolder _labelHolder = new LabelHolder();
-        
+
         private readonly LabelDrawer _labelDrawer;
 
         private readonly FontHandler _fontHandler = new FontHandler();
@@ -28,7 +28,7 @@ namespace LabelsOnFloor
         {
             Instance = this;
             LabelPlacementHandler = new LabelPlacementHandler(
-                _labelHolder, 
+                _labelHolder,
                 new MeshHandler(_fontHandler));
 
             _labelDrawer = new LabelDrawer(_labelHolder, _fontHandler);
@@ -36,12 +36,12 @@ namespace LabelsOnFloor
 
         public void Draw()
         {
-            if (!_enabled 
+            if (!_enabled
                 || Current.ProgramState != ProgramState.Playing
                 || Find.VisibleMap == null
                 || WorldRendererUtility.WorldRenderedNow)
             {
-                LabelPlacementHandler.Ready = false;
+                LabelPlacementHandler.SetDirty();
                 return;
             }
 
@@ -52,14 +52,15 @@ namespace LabelsOnFloor
 
         public override void OnGUI()
         {
+            if (WorldRendererUtility.WorldRenderedNow)
+                LabelPlacementHandler?.SetDirty();
+
             base.OnGUI();
-            if (WorldRendererUtility.WorldRenderedNow && LabelPlacementHandler != null)
-                LabelPlacementHandler.Ready = false;
         }
 
         public override void WorldLoaded()
         {
-            LabelPlacementHandler.Ready = false;
+            LabelPlacementHandler.SetDirty();
         }
 
         public override void DefsLoaded()

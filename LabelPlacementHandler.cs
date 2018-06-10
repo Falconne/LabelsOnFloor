@@ -6,18 +6,6 @@ namespace LabelsOnFloor
 {
     public class LabelPlacementHandler
     {
-        public bool Ready
-        {
-            get => _ready;
-
-            set
-            {
-                _ready = value;
-                if (!_ready)
-                    _labelHolder.Clear();
-            }
-        }
-
         private readonly LabelHolder _labelHolder;
 
         private readonly LabelMaker _labelMaker = new LabelMaker();
@@ -36,9 +24,21 @@ namespace LabelsOnFloor
             _meshHandler = meshHandler;
         }
 
+        public void SetDirty()
+        {
+            _labelHolder.Clear();
+            _ready = false;
+        }
+
+        public void SetDirtyIfAreaIsOnMap(Map map)
+        {
+            if (map == _map)
+                SetDirty();
+        }
+
         public void RegenerateIfNeeded()
         {
-            if (_map == Find.VisibleMap && Ready)
+            if (_map == Find.VisibleMap && _ready)
                 return;
 
             _map = Find.VisibleMap;
@@ -54,9 +54,17 @@ namespace LabelsOnFloor
             AddOrUpdateRoom(room, null);
         }
 
+        public void AddOrUpdateRoomnContainingBuilding(Building building)
+        {
+            if (building.Map != _map)
+                return;
+
+
+        }
+
         public void AddOrUpdateRoom(Room room, PlacementDataFinderForRooms placementDataFinderForRooms)
         {
-            if (!Ready || room == null)
+            if (!_ready || room == null)
                 return;
 
             if (room.Map != _map)
@@ -76,7 +84,7 @@ namespace LabelsOnFloor
 
         public void AddOrUpdateZone(Zone zone)
         {
-            if (!Ready || zone == null)
+            if (!_ready || zone == null)
                 return;
 
             if (zone.Map != _map)

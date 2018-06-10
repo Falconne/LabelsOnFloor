@@ -11,7 +11,6 @@ namespace LabelsOnFloor
         [HarmonyPostfix]
         public static void ChangeMedicalStatus(Building_Bed __instance, ref bool value)
         {
-            Main.Instance.Logger.Message("medical changed");
             var room = __instance.GetRoom();
             if (room != null)
             {
