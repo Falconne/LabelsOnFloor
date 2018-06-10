@@ -18,6 +18,10 @@ namespace LabelsOnFloor
 
         private SettingHandle<bool> _enabled;
 
+        private SettingHandle<bool> _showRoomLabels;
+
+        private SettingHandle<bool> _showZoneLabels;
+
         private readonly LabelHolder _labelHolder = new LabelHolder();
 
         private readonly LabelDrawer _labelDrawer;
@@ -50,6 +54,16 @@ namespace LabelsOnFloor
 
         }
 
+        public bool ShowRoomNames()
+        {
+            return _showRoomLabels;
+        }
+
+        public bool ShowZoneNames()
+        {
+            return _showZoneLabels;
+        }
+
         public override void OnGUI()
         {
             if (WorldRendererUtility.WorldRenderedNow)
@@ -66,8 +80,24 @@ namespace LabelsOnFloor
         public override void DefsLoaded()
         {
             _enabled = Settings.GetHandle(
-                "showRoomLabels", "FALCLF.Enabled".Translate(),
+                "enabled", "FALCLF.Enabled".Translate(),
                 "FALCLF.EnabledDesc".Translate(), true);
+
+            _showRoomLabels = Settings.GetHandle(
+                "showRoomLabels", "FALCLF.ShowRoomLabels".Translate(),
+                "FALCLF.ShowRoomLabelsDesc".Translate(), true);
+
+            _showZoneLabels = Settings.GetHandle(
+                "showZoneLabels", "FALCLF.ShowZoneLabels".Translate(),
+                "FALCLF.ShowZoneLabelsDesc".Translate(), true);
+
+
+            _enabled.OnValueChanged = val => { LabelPlacementHandler.SetDirty(); };
+
+            _showRoomLabels.OnValueChanged = val => { LabelPlacementHandler.SetDirty(); };
+
+            _showZoneLabels.OnValueChanged = val => { LabelPlacementHandler.SetDirty(); };
+
         }
     }
 }

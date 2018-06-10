@@ -2,4 +2,10 @@
 <LanguageData>
     <FALCLF.Enabled>Enabled</FALCLF.Enabled>
     <FALCLF.EnabledDesc>Enable the mod</FALCLF.EnabledDesc>
+
+    <FALCLF.ShowRoomLabels>Show Room Names</FALCLF.ShowRoomLabels>
+    <FALCLF.ShowRoomLabelsDesc>Show room names on floor</FALCLF.ShowRoomLabelsDesc>
+
+    <FALCLF.ShowZoneLabels>Show Zone Names</FALCLF.ShowZoneLabels>
+    <FALCLF.ShowZoneLabelsDesc>Show stockpile and growing zone names on floor</FALCLF.ShowZoneLabelsDesc>
 </LanguageData>

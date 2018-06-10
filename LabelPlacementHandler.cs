@@ -56,6 +56,9 @@ namespace LabelsOnFloor
 
         public void AddOrUpdateRoomnContainingBuilding(Building building)
         {
+            if (!Main.Instance.ShowRoomNames())
+                return;
+
             if (building.Map != _map)
                 return;
 
@@ -64,6 +67,9 @@ namespace LabelsOnFloor
 
         public void AddOrUpdateRoom(Room room, PlacementDataFinderForRooms placementDataFinderForRooms)
         {
+            if (!Main.Instance.ShowRoomNames())
+                return;
+
             if (!_ready || room == null)
                 return;
 
@@ -114,6 +120,9 @@ namespace LabelsOnFloor
 
         private void RegenerateRoomLabels()
         {
+            if (!Main.Instance.ShowRoomNames())
+                return;
+
             var roomPlacementDataFinder = new PlacementDataFinderForRooms(_map);
             foreach (var room in _map.regionGrid.allRooms)
             {
@@ -123,6 +132,9 @@ namespace LabelsOnFloor
 
         private void RegenerateZoneLabels()
         {
+            if (!Main.Instance.ShowZoneNames())
+                return;
+
             foreach (var zone in _map.zoneManager.AllZones)
             {
                 AddOrUpdateZone(zone);
