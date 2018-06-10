@@ -13,7 +13,7 @@ namespace LabelsOnFloor
         private readonly RoomRoleFinder _roomRoleFinder = new RoomRoleFinder();
 
         private readonly MeshHandler _meshHandler;
-        
+
         private Map _map;
 
         private bool _ready;
@@ -87,13 +87,17 @@ namespace LabelsOnFloor
                 return;
 
             var text = _labelMaker.GetZoneLabel(zone);
-            AddLabelForArea(zone, text, () => PlacementDataFinderForZones.GetData(zone, _map, text.Length));
+            var addedLabel = 
+                AddLabelForArea(zone, text, () => PlacementDataFinderForZones.GetData(zone, _map, text.Length));
+
+            if (addedLabel != null)
+                addedLabel.IsZone = true;
         }
 
-        private void AddLabelForArea(object area, string text, Func<PlacementData> placementDataGetter)
+        private Label AddLabelForArea(object area, string text, Func<PlacementData> placementDataGetter)
         {
             if (string.IsNullOrEmpty(text))
-                return;
+                return null;
 
             _labelHolder.RemoveLabelForArea(area);
 
@@ -104,8 +108,11 @@ namespace LabelsOnFloor
                 AssociatedArea = area
             };
 
-            if (label.IsValid())
-                _labelHolder.Add(label);
+            if (!label.IsValid())
+                return null;
+
+            _labelHolder.Add(label);
+            return label;
         }
 
         private void RegenerateRoomLabels()
