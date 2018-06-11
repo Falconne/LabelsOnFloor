@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -61,8 +62,15 @@ namespace LabelsOnFloor
 
             _dirty = false;
             var map = Find.VisibleMap;
+
             var roomsToRemove = new HashSet<Room>();
-            var labelledRooms = _currentLabels.Where(l => l.AssociatedArea is Room);
+
+            var labelledRooms = new HashSet<Room>(
+                _currentLabels
+                    .Where(l => l.AssociatedArea is Room)
+                    .Select(l => l.AssociatedArea as Room)
+                );
+
             foreach (var label in _currentLabels)
             {
                 if (!label.IsZone)
@@ -71,14 +79,19 @@ namespace LabelsOnFloor
                 foreach (var cell in (label.AssociatedArea as Zone).Cells)
                 {
                     var roomWithCell = cell.GetRoom(map);
-                    if (roomWithCell != null)
-                    {
-                        if (labelledRooms.Contains(roomWithCell))
-                            roomsToRemove.Add(roomWithCell);
-                    }
+                    if (roomWithCell == null || roomWithCell.Role == RoomRoleDefOf.None)
+                        continue;
+
+                    if (labelledRooms.Contains(roomWithCell))
+                        roomsToRemove.Add(roomWithCell);
 
                     break;
                 }
+            }
+
+            foreach (var room in roomsToRemove)
+            {
+                _currentLabels.RemoveAll(l => l.AssociatedArea == room);
             }
         }
     }
