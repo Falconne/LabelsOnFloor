@@ -67,7 +67,7 @@ namespace LabelsOnFloor
 
             var labelledRooms = new HashSet<Room>(
                 _currentLabels
-                    .Where(l => l.AssociatedArea is Room)
+                    .Where(l => !l.IsZone)
                     .Select(l => l.AssociatedArea as Room)
                 );
 
@@ -76,17 +76,18 @@ namespace LabelsOnFloor
                 if (!label.IsZone)
                     continue;
 
-                foreach (var cell in (label.AssociatedArea as Zone).Cells)
-                {
-                    var roomWithCell = cell.GetRoom(map);
-                    if (roomWithCell == null || roomWithCell.Role == RoomRoleDefOf.None)
-                        continue;
+                // Assume we don't need to handle zones that are both inside and outside a room,
+                // so we only need to test the location of one cell
+                var zone = label.AssociatedArea as Zone;
+                if (zone.Cells.Count < 1)
+                    continue;
 
-                    if (labelledRooms.Contains(roomWithCell))
-                        roomsToRemove.Add(roomWithCell);
+                var roomWithCell = zone.Cells.First().GetRoom(map);
+                if (roomWithCell == null || roomWithCell.Role == RoomRoleDefOf.None)
+                    continue;
 
-                    break;
-                }
+                if (labelledRooms.Contains(roomWithCell))
+                    roomsToRemove.Add(roomWithCell);
             }
 
             foreach (var room in roomsToRemove)
