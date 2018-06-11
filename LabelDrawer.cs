@@ -17,7 +17,6 @@ namespace LabelsOnFloor
 
         public void Draw()
         {
-            // TODO Remove rooms with zones
             var currentViewRect = Find.CameraDriver.CurrentViewRect;
             foreach (var label in _labelHolder.GetLabels())
             {

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Patches\Building_Bed_Medical_Patch.cs" />
+    <Compile Include="Patches\Dialog_RenameZone_SetName_Patch.cs" />
     <Compile Include="Patches\DynamicDrawManager_DrawDynamicThings_Patch.cs" />
     <Compile Include="EdgeFinder.cs" />
     <Compile Include="FontHandler.cs" />
