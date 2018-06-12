@@ -22,6 +22,8 @@ namespace LabelsOnFloor
 
         private SettingHandle<bool> _showZoneLabels;
 
+        private SettingHandle<float> _maxFontScale;
+
         private readonly LabelHolder _labelHolder = new LabelHolder();
 
         private readonly LabelDrawer _labelDrawer;
@@ -64,6 +66,11 @@ namespace LabelsOnFloor
             return _showZoneLabels;
         }
 
+        public float GetMaxFontScale()
+        {
+            return _maxFontScale;
+        }
+
         public override void OnGUI()
         {
             if (WorldRendererUtility.WorldRenderedNow)
@@ -91,12 +98,19 @@ namespace LabelsOnFloor
                 "showZoneLabels", "FALCLF.ShowZoneLabels".Translate(),
                 "FALCLF.ShowZoneLabelsDesc".Translate(), true);
 
+            _maxFontScale = Settings.GetHandle(
+                "maxFontScale", "FALCLF.MaxFontScale".Translate(),
+                "FALCLF.MaxFontScaleDesc".Translate(), 1f,
+                Validators.FloatRangeValidator(0.1f, 5.0f));
+
 
             _enabled.OnValueChanged = val => { LabelPlacementHandler.SetDirty(); };
 
             _showRoomLabels.OnValueChanged = val => { LabelPlacementHandler.SetDirty(); };
 
             _showZoneLabels.OnValueChanged = val => { LabelPlacementHandler.SetDirty(); };
+
+            _maxFontScale.OnValueChanged = val => { LabelPlacementHandler.SetDirty(); };
 
         }
     }

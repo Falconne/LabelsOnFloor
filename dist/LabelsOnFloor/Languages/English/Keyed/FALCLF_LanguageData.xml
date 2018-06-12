@@ -8,4 +8,7 @@
 
     <FALCLF.ShowZoneLabels>Show Zone Names</FALCLF.ShowZoneLabels>
     <FALCLF.ShowZoneLabelsDesc>Show stockpile and growing zone names on floor</FALCLF.ShowZoneLabelsDesc>
+    
+    <FALCLF.MaxFontScale>Max font scale</FALCLF.MaxFontScale>
+    <FALCLF.MaxFontScaleDesc>Decimal value limiting the maximum size of text. At 1.0 a letter is about one tile wide. Must be between 0.1 and 5.0.</FALCLF.MaxFontScaleDesc>
 </LanguageData>
