@@ -14,4 +14,13 @@
     
     <FALCLF.MinFontScale>Min font scale</FALCLF.MinFontScale>
     <FALCLF.MinFontScaleDesc>Decimal value limiting the minimum size of text. A label needing text smaller than this will not be displayed. At 1.0 a letter is about one tile wide. Must be between 0.1 and 1.0.</FALCLF.MinFontScaleDesc>
+    
+    <FALCLF.MaxAllowedZoom>Max zoom for labels</FALCLF.MaxAllowedZoom>
+    <FALCLF.MaxAllowedZoomDesc>Furthest zoom at which visible labels will be drawn. Note that very small labels may not be drawn at some zoom levels, regardless of this setting.</FALCLF.MaxAllowedZoomDesc>
+    
+    <FALCLF.enumSetting_Closest>Closest</FALCLF.enumSetting_Closest>
+    <FALCLF.enumSetting_Close>Close</FALCLF.enumSetting_Close>
+    <FALCLF.enumSetting_Middle>Middle</FALCLF.enumSetting_Middle>
+    <FALCLF.enumSetting_Far>Far</FALCLF.enumSetting_Far>
+    <FALCLF.enumSetting_Furthest>Furthest</FALCLF.enumSetting_Furthest>
 </LanguageData>

@@ -26,6 +26,8 @@ namespace LabelsOnFloor
 
         private SettingHandle<float> _minFontScale;
 
+        private SettingHandle<CameraZoomRange> _maxAllowedZoom;
+
         private readonly LabelHolder _labelHolder = new LabelHolder();
 
         private readonly LabelDrawer _labelDrawer;
@@ -52,6 +54,9 @@ namespace LabelsOnFloor
                 LabelPlacementHandler.SetDirty();
                 return;
             }
+
+            if (Find.CameraDriver.CurrentZoom > _maxAllowedZoom)
+                return;
 
             LabelPlacementHandler.RegenerateIfNeeded();
             _labelDrawer.Draw();
@@ -114,6 +119,11 @@ namespace LabelsOnFloor
                 "minFontScale", "FALCLF.MinFontScale".Translate(),
                 "FALCLF.MinFontScaleDesc".Translate(), 0.2f,
                 Validators.FloatRangeValidator(0.1f, 1.0f));
+
+            _maxAllowedZoom = Settings.GetHandle(
+                "maxAllowedZoom", "FALCLF.MaxAllowedZoom".Translate(),
+                "FALCLF.MaxAllowedZoomDesc".Translate(), CameraZoomRange.Furthest,
+                null, "FALCLF.enumSetting_");
 
 
             _enabled.OnValueChanged = val => { LabelPlacementHandler.SetDirty(); };
