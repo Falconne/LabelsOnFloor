@@ -3,12 +3,15 @@
     <FALCLF.Enabled>Enabled</FALCLF.Enabled>
     <FALCLF.EnabledDesc>Enable the mod</FALCLF.EnabledDesc>
 
-    <FALCLF.ShowRoomLabels>Show Room Names</FALCLF.ShowRoomLabels>
+    <FALCLF.ShowRoomLabels>Show room names</FALCLF.ShowRoomLabels>
     <FALCLF.ShowRoomLabelsDesc>Show room names on floor</FALCLF.ShowRoomLabelsDesc>
 
-    <FALCLF.ShowZoneLabels>Show Zone Names</FALCLF.ShowZoneLabels>
+    <FALCLF.ShowZoneLabels>Show zone names</FALCLF.ShowZoneLabels>
     <FALCLF.ShowZoneLabelsDesc>Show stockpile and growing zone names on floor</FALCLF.ShowZoneLabelsDesc>
     
     <FALCLF.MaxFontScale>Max font scale</FALCLF.MaxFontScale>
     <FALCLF.MaxFontScaleDesc>Decimal value limiting the maximum size of text. At 1.0 a letter is about one tile wide. Must be between 0.1 and 5.0.</FALCLF.MaxFontScaleDesc>
+    
+    <FALCLF.MinFontScale>Min font scale</FALCLF.MinFontScale>
+    <FALCLF.MinFontScaleDesc>Decimal value limiting the minimum size of text. A label needing text smaller than this will not be displayed. At 1.0 a letter is about one tile wide. Must be between 0.1 and 1.0.</FALCLF.MinFontScaleDesc>
 </LanguageData>

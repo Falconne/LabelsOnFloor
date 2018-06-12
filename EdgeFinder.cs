@@ -60,12 +60,16 @@ namespace LabelsOnFloor
                 placementData.Scale = GetScalingVector(bestEdges.Row.Count, labelLength);
             }
 
+            if (placementData.Scale.x < Main.Instance.GetMinFontScale())
+                return null;
+
             return placementData;
         }
 
         private static Vector3 GetScalingVector(int cellCount, int labelLength)
         {
             var scaling = (cellCount - 0.4f) / labelLength;
+
             if (scaling > Main.Instance.GetMaxFontScale())
                 scaling = Main.Instance.GetMaxFontScale();
 

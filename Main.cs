@@ -24,6 +24,8 @@ namespace LabelsOnFloor
 
         private SettingHandle<float> _maxFontScale;
 
+        private SettingHandle<float> _minFontScale;
+
         private readonly LabelHolder _labelHolder = new LabelHolder();
 
         private readonly LabelDrawer _labelDrawer;
@@ -71,6 +73,11 @@ namespace LabelsOnFloor
             return _maxFontScale;
         }
 
+        public float GetMinFontScale()
+        {
+            return _minFontScale;
+        }
+
         public override void OnGUI()
         {
             if (WorldRendererUtility.WorldRenderedNow)
@@ -103,6 +110,11 @@ namespace LabelsOnFloor
                 "FALCLF.MaxFontScaleDesc".Translate(), 1f,
                 Validators.FloatRangeValidator(0.1f, 5.0f));
 
+            _minFontScale = Settings.GetHandle(
+                "minFontScale", "FALCLF.MinFontScale".Translate(),
+                "FALCLF.MinFontScaleDesc".Translate(), 0.2f,
+                Validators.FloatRangeValidator(0.1f, 1.0f));
+
 
             _enabled.OnValueChanged = val => { LabelPlacementHandler.SetDirty(); };
 
@@ -112,6 +124,7 @@ namespace LabelsOnFloor
 
             _maxFontScale.OnValueChanged = val => { LabelPlacementHandler.SetDirty(); };
 
+            _minFontScale.OnValueChanged = val => { LabelPlacementHandler.SetDirty(); };
         }
     }
 }
