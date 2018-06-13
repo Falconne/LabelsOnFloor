@@ -84,7 +84,9 @@
     <Content Include="dist\LabelsOnFloor\About\Preview.png" />
     <Content Include="dist\LabelsOnFloor\About\PublishedFileId.txt" />
     <Content Include="dist\LabelsOnFloor\About\Version.xml" />
-    <Content Include="dist\LabelsOnFloor\Languages\English\Keyed\FALCLF_LanguageData.xml" />
+    <Content Include="dist\LabelsOnFloor\Languages\English\Keyed\FALCLF_LanguageData.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="dist\LabelsOnFloor\Textures\Consolas.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

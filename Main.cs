@@ -18,6 +18,10 @@ namespace LabelsOnFloor
 
         private SettingHandle<bool> _enabled;
 
+        private SettingHandle<bool> _useLightText;
+
+        private SettingHandle<int> _opacity;
+
         private SettingHandle<bool> _showRoomLabels;
 
         private SettingHandle<bool> _showZoneLabels;
@@ -63,6 +67,16 @@ namespace LabelsOnFloor
 
         }
 
+        public bool UseLightText()
+        {
+            return _useLightText;
+        }
+
+        public float GetOpacity()
+        {
+            return _opacity / 100f;
+        }
+
         public bool ShowRoomNames()
         {
             return _showRoomLabels;
@@ -101,6 +115,20 @@ namespace LabelsOnFloor
             _enabled = Settings.GetHandle(
                 "enabled", "FALCLF.Enabled".Translate(),
                 "FALCLF.EnabledDesc".Translate(), true);
+
+            _useLightText = Settings.GetHandle(
+                "useLightText", "FALCLF.UseLightText".Translate(),
+                "FALCLF.UseLightTextDesc".Translate(), false);
+
+            _useLightText.OnValueChanged = val => { _fontHandler?.Reset(); };
+
+            _opacity = Settings.GetHandle(
+                "opacity", "FALCLF.TextOpacity".Translate(),
+                "FALCHM.TextOpacityDesc".Translate(), 30,
+                Validators.IntRangeValidator(1, 100));
+
+            _opacity.OnValueChanged = val => { _fontHandler?.Reset(); };
+
 
             _showRoomLabels = Settings.GetHandle(
                 "showRoomLabels", "FALCLF.ShowRoomLabels".Translate(),

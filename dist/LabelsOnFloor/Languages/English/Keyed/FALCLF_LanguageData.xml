@@ -2,6 +2,12 @@
 <LanguageData>
     <FALCLF.Enabled>Enabled</FALCLF.Enabled>
     <FALCLF.EnabledDesc>Enable the mod</FALCLF.EnabledDesc>
+    
+    <FALCLF.UseLightText>Use white text</FALCLF.UseLightText>
+    <FALCLF.UseLightTextDesc>Use white instead of black text</FALCLF.UseLightTextDesc>
+    
+    <FALCLF.TextOpacity>Text opacity</FALCLF.TextOpacity>
+    <FALCLF.TextOpacityDesc>How solid the labels look</FALCLF.TextOpacityDesc>
 
     <FALCLF.ShowRoomLabels>Show room names</FALCLF.ShowRoomLabels>
     <FALCLF.ShowRoomLabelsDesc>Show room names on floor</FALCLF.ShowRoomLabelsDesc>

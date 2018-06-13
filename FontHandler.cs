@@ -30,12 +30,17 @@ namespace LabelsOnFloor
         {
             if (_material == null)
             {
-                var color = Color.white;
-                color.a = 0.33f;
+                var color = (Main.Instance.UseLightText()) ? Color.white : Color.black;
+                color.a = Main.Instance.GetOpacity();
                 _material = MaterialPool.MatFrom(Resources.Font, ShaderDatabase.Transparent, color);
             }
 
             return _material;
+        }
+
+        public void Reset()
+        {
+            _material = null;
         }
 
         public IEnumerable<CharBoundsInTexture> GetBoundsInTextureFor(string text)
