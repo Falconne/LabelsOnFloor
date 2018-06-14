@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <FALCLF.Enabled>使用する</FALCLF.Enabled>
+  <FALCLF.EnabledDesc>チェックを入れるとModを使用可能にします。</FALCLF.EnabledDesc>
+
+  <FALCLF.UseLightText>白文字を使用</FALCLF.UseLightText>
+  <FALCLF.UseLightTextDesc>黒色の文字の代わりに白色を使います。</FALCLF.UseLightTextDesc>
+
+  <FALCLF.TextOpacity>文字の不透明度</FALCLF.TextOpacity>
+  <FALCLF.TextOpacityDesc>表示される名前がどの程度はっきりとしているか設定できます。</FALCLF.TextOpacityDesc>
+
+  <FALCLF.ShowRoomLabels>部屋名を表示</FALCLF.ShowRoomLabels>
+  <FALCLF.ShowRoomLabelsDesc>部屋に付けられた名前を床面に表示します。</FALCLF.ShowRoomLabelsDesc>
+
+  <FALCLF.ShowZoneLabels>ゾーン名を表示</FALCLF.ShowZoneLabels>
+  <FALCLF.ShowZoneLabelsDesc>備蓄ゾーンと農業ゾーンの名前を床面に表示します。</FALCLF.ShowZoneLabelsDesc>
+
+  <FALCLF.MaxFontScale>最大文字サイズ</FALCLF.MaxFontScale>
+  <FALCLF.MaxFontScaleDesc>表示される文字の最大サイズを制限します(10進法の数値を使用)。 1.0で、文字の大きさはおおよそ1タイル分の幅です。 この数値は0.1から5.0までの範囲内である必要があります。</FALCLF.MaxFontScaleDesc>
+
+  <FALCLF.MinFontScale>最小文字サイズ</FALCLF.MinFontScale>
+  <FALCLF.MinFontScaleDesc>表示される文字の最小サイズを制限します(10進法の数値を使用)。 これよりも小さい文字を必要とする名前は描画されません。 1.0で、文字の大きさはおおよそ1タイル分の幅です。 この数値は0.1から1.0までの範囲内である必要があります。</FALCLF.MinFontScaleDesc>
+
+  <FALCLF.MaxAllowedZoom>名前の最大拡大倍率</FALCLF.MaxAllowedZoom>
+  <FALCLF.MaxAllowedZoomDesc>表示可能な名前が画面で描画される、最も遠く表示させる際のズーム倍率です。 この設定に関係なく、一部の拡大レベルでは文字の大きさが非常に小さい名前が描画されないことがあります。</FALCLF.MaxAllowedZoomDesc>
+
+  <FALCLF.enumSetting_Closest>最も近い</FALCLF.enumSetting_Closest>
+  <FALCLF.enumSetting_Close>近い</FALCLF.enumSetting_Close>
+  <FALCLF.enumSetting_Middle>中間</FALCLF.enumSetting_Middle>
+  <FALCLF.enumSetting_Far>遠い</FALCLF.enumSetting_Far>
+  <FALCLF.enumSetting_Furthest>最も遠い</FALCLF.enumSetting_Furthest>
+
+</LanguageData>
