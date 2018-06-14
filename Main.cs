@@ -124,7 +124,7 @@ namespace LabelsOnFloor
 
             _opacity = Settings.GetHandle(
                 "opacity", "FALCLF.TextOpacity".Translate(),
-                "FALCHM.TextOpacityDesc".Translate(), 30,
+                "FALCLF.TextOpacityDesc".Translate(), 30,
                 Validators.IntRangeValidator(1, 100));
 
             _opacity.OnValueChanged = val => { _fontHandler?.Reset(); };
