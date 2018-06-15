@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	
+    <DesignationCategoryDef>
+        <defName>RenameDesignator</defName>
+        <label>Rename</label>
+        <description>Rename a room</description>
+        <order>9900</order>
+        <specialDesignatorClasses>
+            <li>LabelsOnFloor.Designator_Rename</li>
+        </specialDesignatorClasses>
+    </DesignationCategoryDef>
+
+    <!--<DesignationDef>
+        <defName>RenameDesignator</defName>
+
+		--><!-- the class that handles the behaviour of this designator. --><!--
+		<designatorClass>LabelsOnFloor.Designator_Rename</designatorClass>
+
+		--><!-- the category def name to add this designator to --><!--
+		<category>Orders</category>
+
+		--><!-- the designator type to insert this designator after --><!--
+		<insertAfter>Designator_Claim</insertAfter>
+
+		--><!-- the label on the button, optional --><!--
+        <label>Rename</label>
+
+		--><!-- button tooltip, optional --><!--
+		<description>Rename a room</description>
+
+		--><!-- the icon texture for the button --><!--
+		<iconTex>rename</iconTex>
+
+		--><!-- the texture to appear over a tile with items this designator is dragged over --><!--
+		<dragHighlightTex>rename</dragHighlightTex>
+
+		--><!-- sound def played after a successful designation --><!--
+		<soundSucceeded>TickHigh</soundSucceeded>
+
+		--><!-- key binding def used to activate the designator, optional --><!--
+		<hotkeyDef>DesignatorRename</hotkeyDef>
+	</DesignationDef>-->
+
+</Defs>
