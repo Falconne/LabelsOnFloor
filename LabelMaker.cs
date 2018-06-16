@@ -17,7 +17,9 @@ namespace LabelsOnFloor
 
         public string GetRoomLabel(Room room)
         {
-            return room.Role.LabelCap.ToUpper();
+            return _customRoomLabelManager.IsRoomCustomised(room)
+                ? _customRoomLabelManager.GetCustomLabelFor(room)
+                : room.Role.LabelCap.ToUpper();
         }
 
         public string GetZoneLabel(Zone zone)

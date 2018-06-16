@@ -16,6 +16,8 @@ namespace LabelsOnFloor
 
         public override string ModIdentifier => "LabelsOnFloor";
 
+        public readonly CustomRoomLabelManager CustomRoomLabelManager = new CustomRoomLabelManager();
+
         private SettingHandle<bool> _enabled;
 
         private SettingHandle<bool> _useLightText;
@@ -38,8 +40,6 @@ namespace LabelsOnFloor
 
         private readonly FontHandler _fontHandler = new FontHandler();
 
-        private readonly CustomRoomLabelManager _customRoomLabelManager = new CustomRoomLabelManager();
-
 
         public Main()
         {
@@ -48,7 +48,7 @@ namespace LabelsOnFloor
             LabelPlacementHandler = new LabelPlacementHandler(
                 _labelHolder, 
                 new MeshHandler(_fontHandler), 
-                new LabelMaker(_customRoomLabelManager));
+                new LabelMaker(CustomRoomLabelManager));
 
             _labelDrawer = new LabelDrawer(_labelHolder, _fontHandler);
         }
@@ -65,7 +65,7 @@ namespace LabelsOnFloor
                 return;
 
             if (LabelPlacementHandler.RegenerateIfNeeded())
-                _customRoomLabelManager.CleanupMissingRooms();
+                CustomRoomLabelManager.CleanupMissingRooms();
 
             _labelDrawer.Draw();
         }

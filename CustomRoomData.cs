@@ -2,7 +2,7 @@
 
 namespace LabelsOnFloor
 {
-    public class CustomRoomLabel
+    public class CustomRoomData
     {
         public string Label;
 
@@ -13,7 +13,7 @@ namespace LabelsOnFloor
         private readonly IntVec3 _keyCell;
 
 
-        public CustomRoomLabel(Room roomObject, Map map, string label, IntVec3 keyCell)
+        public CustomRoomData(Room roomObject, Map map, string label, IntVec3 keyCell)
         {
             RoomObject = roomObject;
             _map = map;
