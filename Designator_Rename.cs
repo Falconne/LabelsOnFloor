@@ -32,9 +32,7 @@ namespace LabelsOnFloor
             if (room == null)
                 return;
 
-            var customRoomData = Main.Instance.GetOrCreateCustomRoomDataFor(room, c);
-            var renameDialog = new Dialog_RenameRoom(customRoomData);
-            Find.WindowStack.Add(renameDialog);
+            Find.WindowStack.Add(Main.Instance.GetRoomRenamer(room, c));
         }
     }
 }

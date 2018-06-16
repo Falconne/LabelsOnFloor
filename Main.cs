@@ -48,14 +48,18 @@ namespace LabelsOnFloor
             LabelPlacementHandler = new LabelPlacementHandler(
                 _labelHolder, 
                 new MeshHandler(_fontHandler), 
-                new LabelMaker(_customRoomLabelManager));
+                new LabelMaker(_customRoomLabelManager),
+                new RoomRoleFinder(_customRoomLabelManager)
+            );
 
             _labelDrawer = new LabelDrawer(_labelHolder, _fontHandler);
         }
 
-        public CustomRoomData GetOrCreateCustomRoomDataFor(Room room, IntVec3 loc)
+        public Dialog_RenameRoom GetRoomRenamer(Room room, IntVec3 loc)
         {
-            return _customRoomLabelManager.GetOrCreateCustomRoomDataFor(room, loc);
+            return new Dialog_RenameRoom(
+                _customRoomLabelManager.GetOrCreateCustomRoomDataFor(room, loc)
+            );
         }
 
         public void Draw()
@@ -69,9 +73,11 @@ namespace LabelsOnFloor
             if (Find.CameraDriver.CurrentZoom > _maxAllowedZoom)
                 return;
 
-            if (LabelPlacementHandler.RegenerateIfNeeded())
+            if (LabelPlacementHandler.ShouldRegenerate())
+            {
                 _customRoomLabelManager.CleanupMissingRooms();
-
+                LabelPlacementHandler.Regenerate();
+            }
             _labelDrawer.Draw();
         }
 

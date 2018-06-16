@@ -4,22 +4,18 @@ namespace LabelsOnFloor
 {
     public class Dialog_RenameRoom : Dialog_Rename
     {
-        private CustomRoomLabelManager _customRoomLabelManager;
+        private readonly CustomRoomData _customRoomData;
 
-        private CustomRoomData _customRoomData;
-
-        public Dialog_RenameRoom(CustomRoomLabelManager customRoomLabelManager,
-            Room room, IntVec3 loc)
+        public Dialog_RenameRoom(CustomRoomData customRoomData)
         {
-            _customRoomLabelManager = customRoomLabelManager;
-            var customRoomData = _customRoomLabelManager.GetOrCreateCustomRoomDataFor(room, loc);
+            _customRoomData = customRoomData;
             curName = customRoomData.Label;
         }
 
         protected override void SetName(string name)
         {
-            _customRoomData.Label = name;
-
+            _customRoomData.Label = name.ToUpper();
+            Main.Instance.LabelPlacementHandler.SetDirty();
         }
 
         protected override AcceptanceReport NameIsValid(string name)

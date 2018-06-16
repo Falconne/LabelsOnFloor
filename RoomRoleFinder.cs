@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 
 namespace LabelsOnFloor
@@ -9,10 +7,20 @@ namespace LabelsOnFloor
     {
         private RoomRoleDef _emptyRooomRole;
 
+        private readonly CustomRoomLabelManager _customRoomLabelManager;
+
+        public RoomRoleFinder(CustomRoomLabelManager customRoomLabelManager)
+        {
+            _customRoomLabelManager = customRoomLabelManager;
+        }
+
         public bool IsImportantRoom(Room room)
         {
             if (room.Role == RoomRoleDefOf.None)
                 return false;
+
+            if (_customRoomLabelManager.IsRoomCustomised(room))
+                return true;
 
             if (_emptyRooomRole != null)
             {

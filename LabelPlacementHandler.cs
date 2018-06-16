@@ -10,7 +10,7 @@ namespace LabelsOnFloor
 
         private readonly LabelMaker _labelMaker;
 
-        private readonly RoomRoleFinder _roomRoleFinder = new RoomRoleFinder();
+        private readonly RoomRoleFinder _roomRoleFinder;
 
         private readonly MeshHandler _meshHandler;
 
@@ -19,11 +19,12 @@ namespace LabelsOnFloor
         private bool _ready;
 
         public LabelPlacementHandler(LabelHolder labelHolder, MeshHandler meshHandler, 
-            LabelMaker labelMaker)
+            LabelMaker labelMaker, RoomRoleFinder roomRoleFinder)
         {
             _labelHolder = labelHolder;
             _meshHandler = meshHandler;
             _labelMaker = labelMaker;
+            _roomRoleFinder = roomRoleFinder;
         }
 
         public void SetDirty()
@@ -38,19 +39,19 @@ namespace LabelsOnFloor
                 SetDirty();
         }
 
-        public bool RegenerateIfNeeded()
+        public bool ShouldRegenerate()
         {
-            if (_map == Find.VisibleMap && _ready)
-                return false;
+            return !_ready || _map != Find.VisibleMap;
+        }
 
+        public void Regenerate()
+        {
             _map = Find.VisibleMap;
             _labelHolder.Clear();
             _ready = true;
 
             RegenerateRoomLabels();
             RegenerateZoneLabels();
-
-            return true;
         }
 
         public void AddOrUpdateRoom(Room room)
