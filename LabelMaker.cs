@@ -1,15 +1,17 @@
-﻿using System.Reflection;
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 
 namespace LabelsOnFloor
 {
     public class LabelMaker
     {
-        private string _defaultGrowingZonePrefix;
+        private readonly string _defaultGrowingZonePrefix;
 
-        public LabelMaker()
+        private readonly CustomRoomLabelManager _customRoomLabelManager;
+
+        public LabelMaker(CustomRoomLabelManager customRoomLabelManager)
         {
+            _customRoomLabelManager = customRoomLabelManager;
             _defaultGrowingZonePrefix = "GrowingZone".Translate();
         }
 

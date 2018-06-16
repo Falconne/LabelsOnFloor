@@ -38,12 +38,17 @@ namespace LabelsOnFloor
 
         private readonly FontHandler _fontHandler = new FontHandler();
 
+        private readonly CustomRoomLabelManager _customRoomLabelManager = new CustomRoomLabelManager();
+
+
         public Main()
         {
             Instance = this;
+
             LabelPlacementHandler = new LabelPlacementHandler(
-                _labelHolder,
-                new MeshHandler(_fontHandler));
+                _labelHolder, 
+                new MeshHandler(_fontHandler), 
+                new LabelMaker(_customRoomLabelManager));
 
             _labelDrawer = new LabelDrawer(_labelHolder, _fontHandler);
         }
@@ -59,9 +64,10 @@ namespace LabelsOnFloor
             if (Find.CameraDriver.CurrentZoom > _maxAllowedZoom)
                 return;
 
-            LabelPlacementHandler.RegenerateIfNeeded();
-            _labelDrawer.Draw();
+            if (LabelPlacementHandler.RegenerateIfNeeded())
+                _customRoomLabelManager.CleanupMissingRooms();
 
+            _labelDrawer.Draw();
         }
 
         public bool IsModAcitve()

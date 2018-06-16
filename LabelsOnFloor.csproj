@@ -46,6 +46,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomRoomLabel.cs" />
+    <Compile Include="CustomRoomLabelManager.cs" />
     <Compile Include="Designator_Rename.cs" />
     <Compile Include="Patches\Building_Bed_Medical_Patch.cs" />
     <Compile Include="Patches\DesignationCategoryDef_ResolvedAllowedDesignators_Patch.cs" />
