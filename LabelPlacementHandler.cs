@@ -39,13 +39,13 @@ namespace LabelsOnFloor
                 SetDirty();
         }
 
-        public bool ShouldRegenerate()
+        public void RegenerateIfNeeded(CustomRoomLabelManager customRoomLabelManager)
         {
-            return !_ready || _map != Find.VisibleMap;
-        }
+            if (_ready && _map == Find.VisibleMap)
+                return;
 
-        public void Regenerate()
-        {
+            customRoomLabelManager.CleanupMissingRooms();
+
             _map = Find.VisibleMap;
             _labelHolder.Clear();
             _ready = true;

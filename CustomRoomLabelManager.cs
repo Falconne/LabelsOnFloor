@@ -16,15 +16,7 @@ namespace LabelsOnFloor
 
         public string GetCustomLabelFor(Room room)
         {
-            Main.Instance.Logger.Message($"Looking for room {room}");
-
-            foreach (var customRoomData in _roomLabels)
-            {
-                Main.Instance.Logger.Message($"Custom label for {customRoomData.RoomObject} is {customRoomData.Label}");
-            }
-
             var result = _roomLabels.FirstOrDefault(rl => rl.RoomObject == room)?.Label;
-            Main.Instance.Logger.Message($"Label returned is {result}");
 
             return result;
         }

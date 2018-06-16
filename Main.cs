@@ -46,8 +46,8 @@ namespace LabelsOnFloor
             Instance = this;
 
             LabelPlacementHandler = new LabelPlacementHandler(
-                _labelHolder, 
-                new MeshHandler(_fontHandler), 
+                _labelHolder,
+                new MeshHandler(_fontHandler),
                 new LabelMaker(_customRoomLabelManager),
                 new RoomRoleFinder(_customRoomLabelManager)
             );
@@ -73,11 +73,7 @@ namespace LabelsOnFloor
             if (Find.CameraDriver.CurrentZoom > _maxAllowedZoom)
                 return;
 
-            if (LabelPlacementHandler.ShouldRegenerate())
-            {
-                _customRoomLabelManager.CleanupMissingRooms();
-                LabelPlacementHandler.Regenerate();
-            }
+            LabelPlacementHandler.RegenerateIfNeeded(_customRoomLabelManager);
             _labelDrawer.Draw();
         }
 
