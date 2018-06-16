@@ -27,7 +27,14 @@ namespace LabelsOnFloor
 
         public override void DesignateSingleCell(IntVec3 c)
         {
-            Find.WindowStack.Add(new Dialog_RenameRoom());
+            var map = Find.VisibleMap;
+            var room = c.GetRoom(map);
+            if (room == null)
+                return;
+
+            var customRoomData = Main.Instance.GetOrCreateCustomRoomDataFor(room, c);
+            var renameDialog = new Dialog_RenameRoom(customRoomData);
+            Find.WindowStack.Add(renameDialog);
         }
     }
 }

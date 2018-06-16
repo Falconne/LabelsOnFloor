@@ -19,13 +19,12 @@ namespace LabelsOnFloor
             return _roomLabels.FirstOrDefault(rl => rl.RoomObject == room)?.Label;
         }
 
-        public string GetOrCreateCustomRoomDataFor(Room room, IntVec3 loc)
+        public CustomRoomData GetOrCreateCustomRoomDataFor(Room room, IntVec3 loc)
         {
-            var result = GetCustomLabelFor(room);
-            if (result == null)
-            {
-                result = new CustomRoomData(room, Find.VisibleMap, "", loc);
-            }
+            var result = _roomLabels.FirstOrDefault(rl => rl.RoomObject == room)
+                ?? new CustomRoomData(room, Find.VisibleMap, "", loc);
+
+            return result;
         }
 
         public void CleanupMissingRooms()

@@ -13,7 +13,13 @@ namespace LabelsOnFloor
 
         protected override void SetName(string name)
         {
-            throw new System.NotImplementedException();
+            _customRoomData.Label = name;
+
+        }
+
+        protected override AcceptanceReport NameIsValid(string name)
+        {
+            return true;
         }
     }
 }
