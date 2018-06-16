@@ -15,14 +15,7 @@ namespace LabelsOnFloor
 
         public override AcceptanceReport CanDesignateCell(IntVec3 loc)
         {
-            var room = loc.GetRoom(Find.VisibleMap);
-            if (room == null)
-                return false;
-
-            if (room.Role == RoomRoleDefOf.None)
-                return false;
-
-            return true;
+            return RoomRoleFinder.GetRoomAtLocation(loc, Find.VisibleMap) != null;
         }
 
         public override void DesignateSingleCell(IntVec3 c)

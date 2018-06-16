@@ -35,5 +35,17 @@ namespace LabelsOnFloor
 
             return true;
         }
+
+        public static Room GetRoomAtLocation(IntVec3 loc, Map map)
+        {
+            if (map == null)
+                return null;
+
+            var room = loc.GetRoom(map);
+            if (room == null)
+                return null;
+
+            return room.Role == RoomRoleDefOf.None ? null : room;
+        }
     }
 }

@@ -86,8 +86,8 @@ namespace LabelsOnFloor
                 if (zone.Cells.Count < 1)
                     continue;
 
-                var roomWithCell = zone.Cells.First().GetRoom(map);
-                if (roomWithCell == null || roomWithCell.Role == RoomRoleDefOf.None)
+                var roomWithCell = RoomRoleFinder.GetRoomAtLocation(zone.Cells.First(), map);
+                if (roomWithCell == null)
                     continue;
 
                 if (labelledRooms.Contains(roomWithCell))

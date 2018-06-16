@@ -36,6 +36,7 @@ namespace LabelsOnFloor
 
         public void CleanupMissingRooms()
         {
+            _roomLabels.ForEach(d => d.AllocateRoomObjectIfNeeded());
             _roomLabels.RemoveAll(data => !data.IsRoomStillValid() || string.IsNullOrEmpty(data.Label));
         }
     }
