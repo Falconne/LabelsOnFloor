@@ -50,10 +50,7 @@ namespace LabelsOnFloor
 
         public void Draw()
         {
-            if (!_enabled
-                || Current.ProgramState != ProgramState.Playing
-                || Find.VisibleMap == null
-                || WorldRendererUtility.WorldRenderedNow)
+            if (!IsModAcitve())
             {
                 LabelPlacementHandler.SetDirty();
                 return;
@@ -65,6 +62,14 @@ namespace LabelsOnFloor
             LabelPlacementHandler.RegenerateIfNeeded();
             _labelDrawer.Draw();
 
+        }
+
+        public bool IsModAcitve()
+        {
+            return _enabled
+                   && Current.ProgramState == ProgramState.Playing
+                   && Find.VisibleMap != null
+                   && !WorldRendererUtility.WorldRenderedNow;
         }
 
         public bool UseLightText()

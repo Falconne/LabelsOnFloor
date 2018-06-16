@@ -46,7 +46,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Designator_Rename.cs" />
     <Compile Include="Patches\Building_Bed_Medical_Patch.cs" />
+    <Compile Include="Patches\DesignationCategoryDef_ResolvedAllowedDesignators_Patch.cs" />
+    <Compile Include="Patches\Dialog_RenameRoom.cs" />
     <Compile Include="Patches\Dialog_RenameZone_SetName_Patch.cs" />
     <Compile Include="Patches\DynamicDrawManager_DrawDynamicThings_Patch.cs" />
     <Compile Include="EdgeFinder.cs" />
@@ -89,6 +92,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="dist\LabelsOnFloor\Textures\Consolas.png" />
+    <Content Include="dist\LabelsOnFloor\Textures\Rename.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
