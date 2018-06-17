@@ -8,7 +8,8 @@ namespace LabelsOnFloor
     {
         public Designator_Rename()
         {
-            defaultLabel = "Rename";
+            defaultLabel = "Rename".Translate();
+            defaultDesc = "FALCLF.RenameDesc".Translate();
             icon = Resources.Rename;
             useMouseIcon = true;
         }

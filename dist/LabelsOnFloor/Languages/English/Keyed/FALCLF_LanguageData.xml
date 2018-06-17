@@ -2,10 +2,10 @@
 <LanguageData>
     <FALCLF.Enabled>Enabled</FALCLF.Enabled>
     <FALCLF.EnabledDesc>Enable the mod</FALCLF.EnabledDesc>
-    
+
     <FALCLF.UseLightText>Use white text</FALCLF.UseLightText>
     <FALCLF.UseLightTextDesc>Use white instead of black text</FALCLF.UseLightTextDesc>
-    
+
     <FALCLF.TextOpacity>Text opacity</FALCLF.TextOpacity>
     <FALCLF.TextOpacityDesc>How solid the labels look</FALCLF.TextOpacityDesc>
 
@@ -14,16 +14,18 @@
 
     <FALCLF.ShowZoneLabels>Show zone names</FALCLF.ShowZoneLabels>
     <FALCLF.ShowZoneLabelsDesc>Show stockpile and growing zone names on floor</FALCLF.ShowZoneLabelsDesc>
-    
+
     <FALCLF.MaxFontScale>Max font scale</FALCLF.MaxFontScale>
     <FALCLF.MaxFontScaleDesc>Decimal value limiting the maximum size of text. At 1.0 a letter is about one tile wide. Must be between 0.1 and 5.0.</FALCLF.MaxFontScaleDesc>
-    
+
     <FALCLF.MinFontScale>Min font scale</FALCLF.MinFontScale>
     <FALCLF.MinFontScaleDesc>Decimal value limiting the minimum size of text. A label needing text smaller than this will not be displayed. At 1.0 a letter is about one tile wide. Must be between 0.1 and 1.0.</FALCLF.MinFontScaleDesc>
-    
+
     <FALCLF.MaxAllowedZoom>Max zoom for labels</FALCLF.MaxAllowedZoom>
     <FALCLF.MaxAllowedZoomDesc>Furthest zoom at which visible labels will be drawn. Note that very small labels may not be drawn at some zoom levels, regardless of this setting.</FALCLF.MaxAllowedZoomDesc>
-    
+
+    <FALCLF.RenameDesc>Rename a room or zone</FALCLF.RenameDesc>
+
     <FALCLF.enumSetting_Closest>Closest</FALCLF.enumSetting_Closest>
     <FALCLF.enumSetting_Close>Close</FALCLF.enumSetting_Close>
     <FALCLF.enumSetting_Middle>Middle</FALCLF.enumSetting_Middle>
