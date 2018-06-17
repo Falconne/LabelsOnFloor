@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using UnityEngine.Assertions.Must;
 using Verse;
 
 namespace LabelsOnFloor
@@ -35,8 +36,10 @@ namespace LabelsOnFloor
 
         public void SetDirtyIfAreaIsOnMap(Map map)
         {
-            if (map == _map)
+            if (map == null || map == _map)
+            {
                 SetDirty();
+            }
         }
 
         public void RegenerateIfNeeded(CustomRoomLabelManager customRoomLabelManager)
