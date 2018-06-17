@@ -4,9 +4,9 @@ using Verse;
 
 namespace LabelsOnFloor
 {
-    public class CustomRoomLabelManager
+    public class CustomRoomLabelManager : IExposable
     {
-        private readonly List<CustomRoomData> _roomLabels = new List<CustomRoomData>();
+        private List<CustomRoomData> _roomLabels = new List<CustomRoomData>();
 
 
         public bool IsRoomCustomised(Room room)
@@ -38,6 +38,11 @@ namespace LabelsOnFloor
         {
             _roomLabels.ForEach(d => d.AllocateRoomObjectIfNeeded());
             _roomLabels.RemoveAll(data => !data.IsRoomStillValid() || string.IsNullOrEmpty(data.Label));
+        }
+
+        public void ExposeData()
+        {
+            Scribe_Collections.Look(ref _roomLabels, "roomLabels", LookMode.Deep);
         }
     }
 }

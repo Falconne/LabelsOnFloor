@@ -125,6 +125,13 @@ namespace LabelsOnFloor
 
         public override void WorldLoaded()
         {
+            base.WorldLoaded();
+            LabelPlacementHandler.SetDirty();
+        }
+
+        public override void MapLoaded(Map map)
+        {
+            base.MapLoaded(map);
             LabelPlacementHandler.SetDirty();
         }
 
