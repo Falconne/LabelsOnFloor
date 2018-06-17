@@ -15,6 +15,6 @@
     <HugsLib.UpdateFeatureDef ParentName="UpdateFeatureBase">
         <defName>LabelsOnFloor_0_18_7</defName>
         <assemblyVersion>0.18.7</assemblyVersion>
-        <content>Rooms can now be renamed, including rooms that don't normally have a role label. The 'Architecture -> Orders' menu contains a Rename button; use it click on a room to rename. Zones can also be renamed this way.</content>
+        <content>Rooms can now be renamed, including rooms that don't normally have a role label. The 'Architecture -> Orders' menu contains a Rename button; use it to click on a room to rename. Zones can also be renamed this way.</content>
     </HugsLib.UpdateFeatureDef>
 </Defs>
