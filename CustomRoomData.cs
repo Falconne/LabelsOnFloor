@@ -21,6 +21,12 @@ namespace LabelsOnFloor
             _keyCell = keyCell;
         }
 
+        // Needed by save/load logic
+        public CustomRoomData()
+        {
+            
+        }
+
         public bool IsRoomStillValid()
         {
             if (RoomObject == null || _map == null)

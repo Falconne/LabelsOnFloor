@@ -8,7 +8,7 @@ namespace LabelsOnFloor
     public class Main : HugsLib.ModBase
     {
 
-        public readonly LabelPlacementHandler LabelPlacementHandler;
+        public LabelPlacementHandler LabelPlacementHandler;
 
         internal new ModLogger Logger => base.Logger;
 
@@ -34,25 +34,16 @@ namespace LabelsOnFloor
 
         private readonly LabelHolder _labelHolder = new LabelHolder();
 
-        private readonly LabelDrawer _labelDrawer;
+        private LabelDrawer _labelDrawer;
 
         private readonly FontHandler _fontHandler = new FontHandler();
 
-        private readonly CustomRoomLabelManager _customRoomLabelManager = new CustomRoomLabelManager();
+        private CustomRoomLabelManager _customRoomLabelManager;
 
 
         public Main()
         {
             Instance = this;
-
-            LabelPlacementHandler = new LabelPlacementHandler(
-                _labelHolder,
-                new MeshHandler(_fontHandler),
-                new LabelMaker(_customRoomLabelManager),
-                new RoomRoleFinder(_customRoomLabelManager)
-            );
-
-            _labelDrawer = new LabelDrawer(_labelHolder, _fontHandler);
         }
 
         public Dialog_RenameRoom GetRoomRenamer(Room room, IntVec3 loc)
@@ -126,7 +117,19 @@ namespace LabelsOnFloor
         public override void WorldLoaded()
         {
             base.WorldLoaded();
-            LabelPlacementHandler.SetDirty();
+
+            _customRoomLabelManager = 
+                UtilityWorldObjectManager.GetUtilityWorldObject<CustomRoomLabelManager>();
+
+            LabelPlacementHandler = new LabelPlacementHandler(
+                _labelHolder,
+                new MeshHandler(_fontHandler),
+                new LabelMaker(_customRoomLabelManager),
+                new RoomRoleFinder(_customRoomLabelManager)
+            );
+
+            _labelDrawer = new LabelDrawer(_labelHolder, _fontHandler);
+
         }
 
         public override void MapLoaded(Map map)

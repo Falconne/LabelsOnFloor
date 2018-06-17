@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using HugsLib.Utils;
 using Verse;
 
 namespace LabelsOnFloor
 {
-    public class CustomRoomLabelManager : IExposable
+    public class CustomRoomLabelManager : UtilityWorldObject
     {
         private List<CustomRoomData> _roomLabels = new List<CustomRoomData>();
 
@@ -16,7 +17,7 @@ namespace LabelsOnFloor
 
         public string GetCustomLabelFor(Room room)
         {
-            var result = _roomLabels.FirstOrDefault(rl => rl.RoomObject == room)?.Label;
+            var result = _roomLabels.FirstOrDefault(rl => rl.RoomObject == room)?.Label.ToUpper();
 
             return result;
         }
@@ -40,8 +41,9 @@ namespace LabelsOnFloor
             _roomLabels.RemoveAll(data => !data.IsRoomStillValid() || string.IsNullOrEmpty(data.Label));
         }
 
-        public void ExposeData()
+        public override void ExposeData()
         {
+            base.ExposeData();
             Scribe_Collections.Look(ref _roomLabels, "roomLabels", LookMode.Deep);
         }
     }

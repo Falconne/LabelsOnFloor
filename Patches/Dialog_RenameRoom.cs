@@ -14,7 +14,7 @@ namespace LabelsOnFloor
 
         protected override void SetName(string name)
         {
-            _customRoomData.Label = name.ToUpper();
+            _customRoomData.Label = name;
             Main.Instance.LabelPlacementHandler.SetDirty();
         }
 
