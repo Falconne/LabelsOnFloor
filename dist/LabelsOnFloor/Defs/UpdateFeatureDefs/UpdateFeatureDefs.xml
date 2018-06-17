@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-  <HugsLib.UpdateFeatureDef Abstract="true" Name="UpdateFeatureBase">
-    <modNameReadable>Labels on Floor</modNameReadable>
-    <modIdentifier>LabelsOnFloor</modIdentifier>
-    <linkUrl>https://ludeon.com/forums/index.php?topic=41730.0</linkUrl>
-  </HugsLib.UpdateFeatureDef>
+    <HugsLib.UpdateFeatureDef Abstract="true" Name="UpdateFeatureBase">
+        <modNameReadable>Labels on Floor</modNameReadable>
+        <modIdentifier>LabelsOnFloor</modIdentifier>
+        <linkUrl>https://ludeon.com/forums/index.php?topic=41730.0</linkUrl>
+    </HugsLib.UpdateFeatureDef>
 
-  <HugsLib.UpdateFeatureDef ParentName="UpdateFeatureBase">
-    <defName>LabelsOnFloor_0_18_5</defName>
-    <assemblyVersion>0.18.5</assemblyVersion>
-    <content>Made labels dark instead of light, to be more subtle. Added several Mod Options to:|* Use light text as before|* Change label opacity|* Set maximum allowed size of text.|* Set minimum size below which a label will not be drawn.|* Set furthest zoom level at which labels will be drawn.</content>
-  </HugsLib.UpdateFeatureDef>
+    <HugsLib.UpdateFeatureDef ParentName="UpdateFeatureBase">
+        <defName>LabelsOnFloor_0_18_5</defName>
+        <assemblyVersion>0.18.5</assemblyVersion>
+        <content>Made labels dark instead of light, to be more subtle. Added several Mod Options to:|* Use light text as before|* Change label opacity|* Set maximum allowed size of text.|* Set minimum size below which a label will not be drawn.|* Set furthest zoom level at which labels will be drawn.</content>
+    </HugsLib.UpdateFeatureDef>
+
+    <HugsLib.UpdateFeatureDef ParentName="UpdateFeatureBase">
+        <defName>LabelsOnFloor_0_18_7</defName>
+        <assemblyVersion>0.18.7</assemblyVersion>
+        <content>Rooms can now be renamed, including rooms that don't normally have a role label. The 'Architecture -> Orders' menu contains a Rename button; use it click on a room to rename. Zones can also be renamed this way.</content>
+    </HugsLib.UpdateFeatureDef>
 </Defs>

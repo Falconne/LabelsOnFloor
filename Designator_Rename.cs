@@ -15,17 +15,25 @@ namespace LabelsOnFloor
 
         public override AcceptanceReport CanDesignateCell(IntVec3 loc)
         {
-            return RoomRoleFinder.GetRoomAtLocation(loc, Find.VisibleMap) != null;
+            var map = Find.VisibleMap;
+            return RoomRoleFinder.GetRoomAtLocation(loc, map) != null 
+                || loc.GetZone(map) != null;
         }
 
         public override void DesignateSingleCell(IntVec3 c)
         {
             var map = Find.VisibleMap;
-            var room = c.GetRoom(map);
-            if (room == null)
-                return;
 
-            Find.WindowStack.Add(Main.Instance.GetRoomRenamer(room, c));
+            var zone = c.GetZone(map);
+            if (zone != null)
+            {
+                Find.WindowStack.Add(new Dialog_RenameZone(zone));
+                return;
+            }
+
+            var room = c.GetRoom(map);
+            if (room != null)
+                Find.WindowStack.Add(Main.Instance.GetRoomRenamer(room, c));
         }
     }
 }
