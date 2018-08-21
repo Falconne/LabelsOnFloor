@@ -31,6 +31,7 @@
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\ThirdParty\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="HugsLib, Version=0.18.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UnlimitedHugs.Rimworld.HugsLib.4.1.1\lib\net35\HugsLib.dll</HintPath>
@@ -43,6 +44,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
       <HintPath>..\..\ThirdParty\UnityEngine.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -98,16 +100,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if exist "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\RimWorldWin_Data\Managed" (
-  if not exist "$(ProjectDir)ThirdParty" mkdir  "$(ProjectDir)ThirdParty"
-  copy /y "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\RimWorldWin_Data\Managed\UnityEngine.dll"  "$(ProjectDir)ThirdParty"
-  copy /y "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\RimWorldWin_Data\Managed\Assembly-CSharp.dll"  "$(ProjectDir)ThirdParty"
-)
-
-if not exist "$(ProjectDir)ThirdParty" (
-  echo Please see Readme about ThirdParty directory
-  exit 1
-)</PreBuildEvent>
+    <PreBuildEvent>powershell.exe -EP Unrestricted $(ProjectDir)..\..\pre-build.ps1</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>if exist "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld" (

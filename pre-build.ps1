@@ -19,5 +19,7 @@ if (!(Test-Path $installDir))
     }
 }
 
-Copy-Item -Force "$rimworldSubdir\UnityEngine.dll"  "$thirdpartyDir"
-Copy-Item -Force "$rimworldSubdir\Assembly-CSharp.dll"  "$thirdpartyDir"
+Write-Host "Copying dependencies from installation directory"
+mkdir $thirdpartyDir | Out-Null
+Copy-Item -Force "$installDir\UnityEngine.dll" "$thirdpartyDir\"
+Copy-Item -Force "$installDir\Assembly-CSharp.dll" "$thirdpartyDir\"
