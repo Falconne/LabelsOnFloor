@@ -100,7 +100,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>powershell.exe -EP Unrestricted $(ProjectDir)..\..\pre-build.ps1</PreBuildEvent>
+    <PreBuildEvent>powershell.exe -EP Unrestricted $(ProjectDir)..\..\build.ps1 doPreBuild</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>if exist "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld" (
