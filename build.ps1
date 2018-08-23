@@ -3,7 +3,11 @@ param
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $Command = "doBuild"
+    $Command = "doBuild",
+
+    [Parameter(Mandatory = $false)]
+    [string]
+    $TargetName
 )
 
 Set-StrictMode -Version Latest
@@ -32,7 +36,7 @@ function doPreBuild
     $thirdpartyDir = "$PSScriptRoot\ThirdParty"
     if (Test-Path "$thirdpartyDir\*.dll")
     {
-        exit 0
+        return
     }
 
     $installDir = getInstallDir
@@ -49,6 +53,25 @@ function doPreBuild
     if (!(Test-Path $thirdpartyDir)) { mkdir $thirdpartyDir | Out-Null }
     Copy-Item -Force "$depsDir\UnityEngine.dll" "$thirdpartyDir\"
     Copy-Item -Force "$depsDir\Assembly-CSharp.dll" "$thirdpartyDir\"
+}
+
+function doPostBuild
+{
+    $installDir = getInstallDir
+    if (!$installDir)
+    {
+        Write-Host -ForegroundColor Yellow `
+            "No Steam installation found, build will not be published"
+
+        return
+    }
+
+    $modDir = "$installDir\Mods\$($TargetName)\Assemblies"
+    if (!(Test-Path $modDir)) { mkdir $modDir | Out-Null }
+
+    # xcopy /y/s  "$(ProjectDir)dist\*" "%ProgramFiles(x86)%\Steam\SteamApps\common\RimWorld\Mods"
+    # copy /y "$(TargetPath)" "%ProgramFiles(x86)%\Steam\SteamApps\common\RimWorld\Mods\$(TargetName)\Assemblies\"
+    # copy /y "$(TargetDir)\*HugsLibChecker.dll" "%ProgramFiles(x86)%\Steam\SteamApps\common\RimWorld\Mods\$(TargetName)\Assemblies\"
 }
 
 & $Command
