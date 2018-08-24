@@ -66,12 +66,17 @@ function doPostBuild
         return
     }
 
-    $modDir = "$installDir\Mods\$($TargetName)\Assemblies"
-    if (!(Test-Path $modDir)) { mkdir $modDir | Out-Null }
+    $modsDir = "$installDir\Mods"
+    $modDir = "$modsDir\$TargetName"
+    $modAssemblyDir = "$modDir\Assemblies"
+    if (!(Test-Path $modAssemblyDir)) { mkdir $modAssemblyDir | Out-Null }
 
-    # xcopy /y/s  "$(ProjectDir)dist\*" "%ProgramFiles(x86)%\Steam\SteamApps\common\RimWorld\Mods"
-    # copy /y "$(TargetPath)" "%ProgramFiles(x86)%\Steam\SteamApps\common\RimWorld\Mods\$(TargetName)\Assemblies\"
-    # copy /y "$(TargetDir)\*HugsLibChecker.dll" "%ProgramFiles(x86)%\Steam\SteamApps\common\RimWorld\Mods\$(TargetName)\Assemblies\"
+    Write-Host "Copying mod to $modDir"
+    Copy-Item -Recurse -Force "$PSScriptRoot\mod-structure\*" $modDir
+    $targetDir = "$PSScriptRoot\src\$TargetName\bin\Release"
+    $targetPath = "$targetDir\$TargetName.dll"
+    Copy-Item -Force $targetPath $modAssemblyDir
+    Copy-Item -Force "$targetDir\*HugsLibChecker.dll" $modAssemblyDir
 }
 
 & $Command
