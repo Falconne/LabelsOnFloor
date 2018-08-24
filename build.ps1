@@ -89,7 +89,7 @@ function doPostBuild
     $distAssemblyDir = "$distTargetDir\Assemblies"
     mkdir $distAssemblyDir | Out-Null
 
-    Copy-Item -Recurse -Force "$PSScriptRoot\src\$TargetName\mod-structure\*" $distTargetDir
+    Copy-Item -Recurse -Force "$PSScriptRoot\mod-structure\*" $distTargetDir
     Copy-Item -Force $targetPath $distAssemblyDir
     Copy-Item -Force "$targetDir\*HugsLibChecker.dll" $distAssemblyDir
 

@@ -87,15 +87,33 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="mod-structure\About\About.xml" />
-    <Content Include="mod-structure\About\Preview.png" />
-    <Content Include="mod-structure\About\PublishedFileId.txt" />
-    <Content Include="mod-structure\About\Version.xml" />
-    <Content Include="mod-structure\Defs\UpdateFeatureDefs\UpdateFeatureDefs.xml" />
-    <Content Include="mod-structure\Languages\English\Keyed\FALCLF_LanguageData.xml" />
-    <Content Include="mod-structure\Languages\Japanese\Keyed\FALCLF_LanguageData.xml" />
-    <Content Include="mod-structure\Textures\Consolas.png" />
-    <Content Include="mod-structure\Textures\Rename.png" />
+    <Content Include="..\..\mod-structure\About\About.xml">
+      <Link>mod-structure\About\About.xml</Link>
+    </Content>
+    <Content Include="..\..\mod-structure\About\Preview.png">
+      <Link>mod-structure\About\Preview.png</Link>
+    </Content>
+    <Content Include="..\..\mod-structure\About\PublishedFileId.txt">
+      <Link>mod-structure\About\PublishedFileId.txt</Link>
+    </Content>
+    <Content Include="..\..\mod-structure\About\Version.xml">
+      <Link>mod-structure\About\Version.xml</Link>
+    </Content>
+    <Content Include="..\..\mod-structure\Defs\UpdateFeatureDefs\UpdateFeatureDefs.xml">
+      <Link>mod-structure\Defs\UpdateFeatureDefs\UpdateFeatureDefs.xml</Link>
+    </Content>
+    <Content Include="..\..\mod-structure\Languages\English\Keyed\FALCLF_LanguageData.xml">
+      <Link>mod-structure\Languages\English\Keyed\FALCLF_LanguageData.xml</Link>
+    </Content>
+    <Content Include="..\..\mod-structure\Languages\Japanese\Keyed\FALCLF_LanguageData.xml">
+      <Link>mod-structure\Languages\Japanese\Keyed\FALCLF_LanguageData.xml</Link>
+    </Content>
+    <Content Include="..\..\mod-structure\Textures\Consolas.png">
+      <Link>mod-structure\Textures\Consolas.png</Link>
+    </Content>
+    <Content Include="..\..\mod-structure\Textures\Rename.png">
+      <Link>mod-structure\Textures\Rename.png</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
