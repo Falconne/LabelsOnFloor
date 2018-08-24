@@ -13,6 +13,29 @@ param
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
+function removePath($path)
+{
+    while ($true)
+    {
+        if (!(Test-Path $path))
+        {
+            return
+        }
+
+        Write-Host "Deleting $path"
+        try
+        {
+            Remove-Item -Recurse $path
+            break
+        }
+        catch
+        {
+            Write-Host "Could not remove $path, will retry"
+            Start-Sleep 3
+        }
+    }
+}
+
 function getInstallDir
 {
     $installSubDir = "Steam\SteamApps\common\RimWorld"
@@ -59,10 +82,7 @@ function doPostBuild
 {
     $distDir = "$PSScriptRoot\dist"
     $distTargetDir = "$distDir\$TargetName"
-    if (Test-Path $distDir)
-    {
-        Remove-Item -Recurse $distDir
-    }
+    removePath $distDir
 
     $targetDir = "$PSScriptRoot\src\$TargetName\bin\Release"
     $targetPath = "$targetDir\$TargetName.dll"
@@ -85,13 +105,10 @@ function doPostBuild
 
     $modsDir = "$installDir\Mods"
     $modDir = "$modsDir\$TargetName"
-    if (Test-Path $modDir)
-    {
-        Remove-Item -Recurse $modDir
-    }
+    removePath $modDir
 
     Write-Host "Copying mod to $modDir"
-    Copy-Item -Recurse -Force "$distDir" $modsDir
+    Copy-Item -Recurse -Force "$distDir\*" $modsDir
 }
 
 & $Command
