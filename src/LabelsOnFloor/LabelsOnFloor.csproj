@@ -102,11 +102,6 @@
     <PreBuildEvent>powershell.exe -EP Unrestricted $(ProjectDir)..\..\build.ps1 doPreBuild</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>if exist "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld" (
-  if not exist "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\Mods\$(TargetName)\Assemblies\" mkdir "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\Mods\$(TargetName)\Assemblies\"
-  xcopy /y/s  "$(ProjectDir)dist\*" "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\Mods"
-  copy /y "$(TargetPath)" "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\Mods\$(TargetName)\Assemblies\"
-  copy /y "$(TargetDir)\*HugsLibChecker.dll" "%25ProgramFiles(x86)%25\Steam\SteamApps\common\RimWorld\Mods\$(TargetName)\Assemblies\"
-)</PostBuildEvent>
+    <PostBuildEvent>powershell.exe -EP Unrestricted $(ProjectDir)..\..\build.ps1 doPostBuild $(TargetName)</PostBuildEvent>
   </PropertyGroup>
 </Project>

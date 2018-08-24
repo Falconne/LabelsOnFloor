@@ -57,6 +57,23 @@ function doPreBuild
 
 function doPostBuild
 {
+    $distDir = "$PSScriptRoot\dist"
+    $distTargetDir = "$distDir\$TargetName"
+    if (Test-Path $distDir)
+    {
+        Remove-Item -Recurse $distDir
+    }
+
+    $targetDir = "$PSScriptRoot\src\$TargetName\bin\Release"
+    $targetPath = "$targetDir\$TargetName.dll"
+    $distAssemblyDir = "$distTargetDir\Assemblies"
+    mkdir $distAssemblyDir | Out-Null
+
+    Copy-Item -Recurse -Force "$PSScriptRoot\src\$TargetName\mod-structure\*" $distTargetDir
+    Copy-Item -Force $targetPath $distAssemblyDir
+    Copy-Item -Force "$targetDir\*HugsLibChecker.dll" $distAssemblyDir
+
+
     $installDir = getInstallDir
     if (!$installDir)
     {
@@ -68,15 +85,13 @@ function doPostBuild
 
     $modsDir = "$installDir\Mods"
     $modDir = "$modsDir\$TargetName"
-    $modAssemblyDir = "$modDir\Assemblies"
-    if (!(Test-Path $modAssemblyDir)) { mkdir $modAssemblyDir | Out-Null }
+    if (Test-Path $modDir)
+    {
+        Remove-Item -Recurse $modDir
+    }
 
     Write-Host "Copying mod to $modDir"
-    Copy-Item -Recurse -Force "$PSScriptRoot\mod-structure\*" $modDir
-    $targetDir = "$PSScriptRoot\src\$TargetName\bin\Release"
-    $targetPath = "$targetDir\$TargetName.dll"
-    Copy-Item -Force $targetPath $modAssemblyDir
-    Copy-Item -Force "$targetDir\*HugsLibChecker.dll" $modAssemblyDir
+    Copy-Item -Recurse -Force "$distDir" $modsDir
 }
 
 & $Command
