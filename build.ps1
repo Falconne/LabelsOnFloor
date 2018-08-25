@@ -1,11 +1,11 @@
 param
 (
-    [Parameter(Mandatory = $false)]
+    [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $Command = "doBuild",
+    $Command,
 
-    [Parameter(Mandatory = $false)]
+    [Parameter(Mandatory = $true)]
     [string]
     $TargetName
 )
@@ -54,7 +54,46 @@ function getInstallDir
     return $null
 }
 
-function doPreBuild
+function getProjectDir
+{
+    return "$PSScriptRoot\src\$TargetName"
+}
+
+function updateToGameVersion
+{
+    $installDir = getInstallDir
+    if (!$installDir)
+    {
+        Write-Host -ForegroundColor Red `
+            "Rimworld installation not found; not setting game version."
+
+        return
+    }
+
+    $gameVersionFile = "$installDir\Version.txt"
+    $gameVersionWithRev = Get-Content $gameVersionFile
+    $version = [version] ($gameVersionWithRev.Split(" "))[0]
+
+    $assemblyInfoFile = "$(getProjectDir)\properties\AssemblyInfo.cs"
+    $content = Get-Content -Raw $assemblyInfoFile
+    $newContent = $content -replace '"\d+\.\d+(\.\d+\.\d+")', "`"$($version.Major).$($version.Minor)`$1"
+    # $newContent = $content -replace '"\d+\.\d+\.', "`"$($version.Major).$($version.Minor)."
+
+    if ($newContent -eq $content)
+    {
+        return
+    }
+
+    Write-Host "Updating to mod to game version $version"
+    Set-Content -Encoding UTF8 -Path $assemblyInfoFile $newContent
+
+    $aboutFile = Resolve-Path "$PSScriptRoot\mod-structure\About\About.xml"
+    $aboutFileContent = [xml] (Get-Content -Raw $aboutFile)
+    $aboutFileContent.ModMetaData.targetVersion = $version.ToString()
+    $aboutFileContent.Save($aboutFile)
+}
+
+function copyDependencies
 {
     $thirdpartyDir = "$PSScriptRoot\ThirdParty"
     if (Test-Path "$thirdpartyDir\*.dll")
@@ -78,13 +117,19 @@ function doPreBuild
     Copy-Item -Force "$depsDir\Assembly-CSharp.dll" "$thirdpartyDir\"
 }
 
+function doPreBuild
+{
+    copyDependencies
+    updateToGameVersion
+}
+
 function doPostBuild
 {
     $distDir = "$PSScriptRoot\dist"
     $distTargetDir = "$distDir\$TargetName"
     removePath $distDir
 
-    $targetDir = "$PSScriptRoot\src\$TargetName\bin\Release"
+    $targetDir = "$(getProjectDir)\bin\Release"
     $targetPath = "$targetDir\$TargetName.dll"
     $distAssemblyDir = "$distTargetDir\Assemblies"
     mkdir $distAssemblyDir | Out-Null
