@@ -3,15 +3,13 @@ param
     [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $Command,
-
-    [Parameter(Mandatory = $true)]
-    [string]
-    $TargetName
+    $Command
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
+
+$targetName = (Get-ChildItem -Path "$PSScriptRoot\src" -Recurse -Filter *.csproj | select -First 1).Basename
 
 function removePath($path)
 {
@@ -56,7 +54,7 @@ function getInstallDir
 
 function getProjectDir
 {
-    return "$PSScriptRoot\src\$TargetName"
+    return "$PSScriptRoot\src\$targetName"
 }
 
 function updateToGameVersion
@@ -77,7 +75,6 @@ function updateToGameVersion
     $assemblyInfoFile = "$(getProjectDir)\properties\AssemblyInfo.cs"
     $content = Get-Content -Raw $assemblyInfoFile
     $newContent = $content -replace '"\d+\.\d+(\.\d+\.\d+")', "`"$($version.Major).$($version.Minor)`$1"
-    # $newContent = $content -replace '"\d+\.\d+\.', "`"$($version.Major).$($version.Minor)."
 
     if ($newContent -eq $content)
     {
@@ -126,11 +123,11 @@ function doPreBuild
 function doPostBuild
 {
     $distDir = "$PSScriptRoot\dist"
-    $distTargetDir = "$distDir\$TargetName"
+    $distTargetDir = "$distDir\$targetName"
     removePath $distDir
 
     $targetDir = "$(getProjectDir)\bin\Release"
-    $targetPath = "$targetDir\$TargetName.dll"
+    $targetPath = "$targetDir\$targetName.dll"
     $distAssemblyDir = "$distTargetDir\Assemblies"
     mkdir $distAssemblyDir | Out-Null
 
@@ -149,7 +146,7 @@ function doPostBuild
     }
 
     $modsDir = "$installDir\Mods"
-    $modDir = "$modsDir\$TargetName"
+    $modDir = "$modsDir\$targetName"
     removePath $modDir
 
     Write-Host "Copying mod to $modDir"

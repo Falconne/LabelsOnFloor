@@ -117,9 +117,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>powershell.exe -EP Unrestricted $(ProjectDir)..\..\build.ps1 doPreBuild $(TargetName)</PreBuildEvent>
+    <PreBuildEvent>powershell.exe -EP Unrestricted $(ProjectDir)..\..\build.ps1 doPreBuild</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>powershell.exe -EP Unrestricted $(ProjectDir)..\..\build.ps1 doPostBuild $(TargetName)</PostBuildEvent>
+    <PostBuildEvent>powershell.exe -EP Unrestricted $(ProjectDir)..\..\build.ps1 doPostBuild</PostBuildEvent>
   </PropertyGroup>
 </Project>
