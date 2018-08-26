@@ -164,7 +164,7 @@ function doPostBuild
     removePath $modDir
 
     Write-Host "Copying mod to $modDir"
-    Copy-Item -Recurse -Force "$distDir\*" $modsDir
+    Copy-Item -Recurse -Force -Exclude *.zip "$distDir\*" $modsDir
 }
 
 & $Command
