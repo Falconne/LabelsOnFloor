@@ -10,6 +10,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $targetName = (Get-ChildItem -Path "$PSScriptRoot\src" -Recurse -Filter *.csproj | select -First 1).Basename
+$distDir = "$PSScriptRoot\dist"
 
 function removePath($path)
 {
@@ -57,6 +58,8 @@ function getProjectDir
     return "$PSScriptRoot\src\$targetName"
 }
 
+$assemblyInfoFile = "$(getProjectDir)\properties\AssemblyInfo.cs"
+
 function updateToGameVersion
 {
     $installDir = getInstallDir
@@ -72,7 +75,6 @@ function updateToGameVersion
     $gameVersionWithRev = Get-Content $gameVersionFile
     $version = [version] ($gameVersionWithRev.Split(" "))[0]
 
-    $assemblyInfoFile = "$(getProjectDir)\properties\AssemblyInfo.cs"
     $content = Get-Content -Raw $assemblyInfoFile
     $newContent = $content -replace '"\d+\.\d+(\.\d+\.\d+")', "`"$($version.Major).$($version.Minor)`$1"
 
@@ -116,13 +118,13 @@ function copyDependencies
 
 function doPreBuild
 {
+    removePath $distDir
     copyDependencies
     updateToGameVersion
 }
 
 function doPostBuild
 {
-    $distDir = "$PSScriptRoot\dist"
     $distTargetDir = "$distDir\$targetName"
     removePath $distDir
 
@@ -151,6 +153,18 @@ function doPostBuild
 
     Write-Host "Copying mod to $modDir"
     Copy-Item -Recurse -Force "$distDir\*" $modsDir
+
+    Write-Host "Creating distro package"
+    $content = Get-Content -Raw $assemblyInfoFile
+    if (!($content -match '"(\d+\.\d+\.\d+\.\d+)"'))
+    {
+        throw "Version info not found in $assemblyInfoFile"
+    }
+
+    $version = $matches[1]
+    $distZip = "$distDir\$targetName.$version.zip"
+    Compress-Archive -Path $distTargetDir -DestinationPath $distZip -CompressionLevel Optimal
+    Write-Host "Created $distZip"
 }
 
 & $Command
