@@ -137,6 +137,18 @@ function doPostBuild
     Copy-Item -Force $targetPath $distAssemblyDir
     Copy-Item -Force "$targetDir\*HugsLibChecker.dll" $distAssemblyDir
 
+    Write-Host "Creating distro package"
+    $content = Get-Content -Raw $assemblyInfoFile
+    if (!($content -match '"(\d+\.\d+\.\d+\.\d+)"'))
+    {
+        throw "Version info not found in $assemblyInfoFile"
+    }
+
+    $version = $matches[1]
+    $distZip = "$distDir\$targetName.$version.zip"
+    Compress-Archive -Path $distTargetDir -DestinationPath $distZip -CompressionLevel Optimal
+    Write-Host "Created $distZip"
+
 
     $installDir = getInstallDir
     if (!$installDir)
@@ -153,18 +165,6 @@ function doPostBuild
 
     Write-Host "Copying mod to $modDir"
     Copy-Item -Recurse -Force "$distDir\*" $modsDir
-
-    Write-Host "Creating distro package"
-    $content = Get-Content -Raw $assemblyInfoFile
-    if (!($content -match '"(\d+\.\d+\.\d+\.\d+)"'))
-    {
-        throw "Version info not found in $assemblyInfoFile"
-    }
-
-    $version = $matches[1]
-    $distZip = "$distDir\$targetName.$version.zip"
-    Compress-Archive -Path $distTargetDir -DestinationPath $distZip -CompressionLevel Optimal
-    Write-Host "Created $distZip"
 }
 
 & $Command
