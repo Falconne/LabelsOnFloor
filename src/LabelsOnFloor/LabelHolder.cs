@@ -65,7 +65,7 @@ namespace LabelsOnFloor
             if (!Main.Instance.ShowRoomNames() || !Main.Instance.ShowZoneNames())
                 return;
 
-            var map = Find.VisibleMap;
+            var map = Find.CurrentMap;
 
             var roomsToRemove = new HashSet<Room>();
 

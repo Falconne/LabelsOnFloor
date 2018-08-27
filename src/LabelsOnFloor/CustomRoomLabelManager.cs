@@ -28,7 +28,7 @@ namespace LabelsOnFloor
             if (result != null)
                 return result;
 
-            result = new CustomRoomData(room, Find.VisibleMap, "", loc);
+            result = new CustomRoomData(room, Find.CurrentMap, "", loc);
             _roomLabels.Add(result);
             result = _roomLabels.FirstOrDefault(rl => rl.RoomObject == room);
 

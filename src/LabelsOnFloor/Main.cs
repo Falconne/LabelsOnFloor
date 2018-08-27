@@ -72,7 +72,7 @@ namespace LabelsOnFloor
         {
             return _enabled
                    && Current.ProgramState == ProgramState.Playing
-                   && Find.VisibleMap != null
+                   && Find.CurrentMap != null
                    && !WorldRendererUtility.WorldRenderedNow;
         }
 

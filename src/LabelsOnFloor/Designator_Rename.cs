@@ -16,14 +16,14 @@ namespace LabelsOnFloor
 
         public override AcceptanceReport CanDesignateCell(IntVec3 loc)
         {
-            var map = Find.VisibleMap;
+            var map = Find.CurrentMap;
             return RoomRoleFinder.GetRoomAtLocation(loc, map) != null 
                 || loc.GetZone(map) != null;
         }
 
         public override void DesignateSingleCell(IntVec3 c)
         {
-            var map = Find.VisibleMap;
+            var map = Find.CurrentMap;
 
             var zone = c.GetZone(map);
             if (zone != null)

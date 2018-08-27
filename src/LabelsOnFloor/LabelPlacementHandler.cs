@@ -44,12 +44,12 @@ namespace LabelsOnFloor
 
         public void RegenerateIfNeeded(CustomRoomLabelManager customRoomLabelManager)
         {
-            if (_ready && _map == Find.VisibleMap)
+            if (_ready && _map == Find.CurrentMap)
                 return;
 
             customRoomLabelManager.CleanupMissingRooms();
 
-            _map = Find.VisibleMap;
+            _map = Find.CurrentMap;
             _labelHolder.Clear();
             _ready = true;
 
