@@ -60,6 +60,17 @@ function getProjectDir
 
 $assemblyInfoFile = "$(getProjectDir)\properties\AssemblyInfo.cs"
 
+function getFileVersionInAssemblyInfo
+{
+    $content = Get-Content -Raw $assemblyInfoFile
+    if (!($content -match '"(\d+\.\d+\.\d+\.\d+)"'))
+    {
+        throw "Version info not found in $assemblyInfoFile"
+    }
+
+    return $matches[1]
+}
+
 function updateToGameVersion
 {
     $installDir = getInstallDir
@@ -71,25 +82,31 @@ function updateToGameVersion
         return
     }
 
+    $currentVersionInFile = [version] (getFileVersionInAssemblyInfo)
+
     $gameVersionFile = "$installDir\Version.txt"
     $gameVersionWithRev = Get-Content $gameVersionFile
-    $version = [version] ($gameVersionWithRev.Split(" "))[0]
+    $gameVersion = [version] ($gameVersionWithRev.Split(" "))[0]
 
     $content = Get-Content -Raw $assemblyInfoFile
-    $newContent = $content -replace '"\d+\.\d+(\.\d+\.\d+")', "`"$($version.Major).$($version.Minor)`$1"
+    $newContent = $content -replace '"\d+\.\d+(\.\d+\.\d+")', "`"$($gameVersion.Major).$($gameVersion.Minor)`$1"
 
     if ($newContent -eq $content)
     {
         return
     }
 
-    Write-Host "Updating to mod to game version $version"
     Set-Content -Encoding UTF8 -Path $assemblyInfoFile $newContent
 
+    # Check game version in mod's About.xml
     $aboutFile = Resolve-Path "$PSScriptRoot\mod-structure\About\About.xml"
     $aboutFileContent = [xml] (Get-Content -Raw $aboutFile)
-    $aboutFileContent.ModMetaData.targetVersion = $version.ToString()
-    $aboutFileContent.Save($aboutFile)
+    if ($aboutFileContent.ModMetaData.targetVersion -ne $gameVersion.ToString())
+    {
+        Write-Host "Updating to mod to game version $gameVersion"
+        $aboutFileContent.ModMetaData.targetVersion = $gameVersion.ToString()
+        $aboutFileContent.Save($aboutFile)
+    }
 }
 
 function copyDependencies
@@ -138,13 +155,7 @@ function doPostBuild
     Copy-Item -Force "$targetDir\*HugsLibChecker.dll" $distAssemblyDir
 
     Write-Host "Creating distro package"
-    $content = Get-Content -Raw $assemblyInfoFile
-    if (!($content -match '"(\d+\.\d+\.\d+\.\d+)"'))
-    {
-        throw "Version info not found in $assemblyInfoFile"
-    }
-
-    $version = $matches[1]
+    $version = getFileVersionInAssemblyInfo
     $distZip = "$distDir\$targetName.$version.zip"
     Compress-Archive -Path $distTargetDir -DestinationPath $distZip -CompressionLevel Optimal
     Write-Host "Created $distZip"
