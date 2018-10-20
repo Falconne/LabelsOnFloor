@@ -5,7 +5,7 @@ using Verse;
 namespace LabelsOnFloor
 {
     [HarmonyPatch(typeof(Building_Bed))]
-    [HarmonyPatch("Medical", PropertyMethod.Setter)]
+    [HarmonyPatch("Medical", MethodType.Getter)]
     public class Building_Bed_Medical_Patch
     {
         [HarmonyPostfix]

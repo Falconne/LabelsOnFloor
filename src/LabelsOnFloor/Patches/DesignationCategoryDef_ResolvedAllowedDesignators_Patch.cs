@@ -7,7 +7,7 @@ using Verse;
 namespace LabelsOnFloor
 {
     [HarmonyPatch(typeof(DesignationCategoryDef))]
-    [HarmonyPatch("ResolvedAllowedDesignators", PropertyMethod.Getter)]
+    [HarmonyPatch("ResolvedAllowedDesignators", MethodType.Getter)]
     public class DesignationCategoryDef_ResolvedAllowedDesignators_Patch
     {
         private static DesignationCategoryDef ordersCategoryDef;
