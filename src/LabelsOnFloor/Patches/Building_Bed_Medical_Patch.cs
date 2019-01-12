@@ -4,12 +4,10 @@ using Verse;
 
 namespace LabelsOnFloor
 {
-    [HarmonyPatch(typeof(Building_Bed))]
-    [HarmonyPatch("Medical", MethodType.Getter)]
+    [HarmonyPatch(typeof(Building_Bed), "FacilityChanged")]
     public class Building_Bed_Medical_Patch
     {
-        [HarmonyPostfix]
-        public static void ChangeMedicalStatus(Building_Bed __instance, ref bool value)
+        public static void Postfix(ref Building_Bed __instance)
         {
             var room = __instance.GetRoom();
             if (room != null)
