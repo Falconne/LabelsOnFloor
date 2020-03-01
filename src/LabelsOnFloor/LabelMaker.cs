@@ -19,7 +19,7 @@ namespace LabelsOnFloor
         {
             return _customRoomLabelManager.IsRoomCustomised(room)
                 ? _customRoomLabelManager.GetCustomLabelFor(room)
-                : room.Role.LabelCap.ToUpper();
+                : room.Role.label.ToUpper();
         }
 
         public string GetZoneLabel(Zone zone)
@@ -29,7 +29,7 @@ namespace LabelsOnFloor
 
             // Use custom zone name, if it looks like it has been changed
             if (growingZone.label.StartsWith(_defaultGrowingZonePrefix))
-                return growingZone.GetPlantDefToGrow().LabelCap.ToUpper();
+                return growingZone.GetPlantDefToGrow().label.ToUpper();
 
             return growingZone.label.ToUpper();
         }
