@@ -17,7 +17,7 @@ namespace LabelsOnFloor
 
         public string GetCustomLabelFor(Room room)
         {
-            var result = _roomLabels.FirstOrDefault(rl => rl.RoomObject == room)?.Label.ToUpper();
+            var result = _roomLabels.FirstOrDefault(rl => rl.RoomObject == room)?.Label?.ToUpper() ?? string.Empty;
 
             return result;
         }

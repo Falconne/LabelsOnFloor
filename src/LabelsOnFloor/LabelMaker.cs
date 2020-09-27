@@ -17,6 +17,9 @@ namespace LabelsOnFloor
 
         public string GetRoomLabel(Room room)
         {
+            if (room == null)
+                return string.Empty;
+
             return _customRoomLabelManager.IsRoomCustomised(room)
                 ? _customRoomLabelManager.GetCustomLabelFor(room)
                 : room.Role.label.ToUpper();
@@ -24,14 +27,17 @@ namespace LabelsOnFloor
 
         public string GetZoneLabel(Zone zone)
         {
+            if (zone == null)
+                return string.Empty;
+
             if (!(zone is Zone_Growing growingZone))
-                return zone.label.ToUpper();
+                return zone.label?.ToUpper() ?? string.Empty;
 
             // Use custom zone name, if it looks like it has been changed
-            if (growingZone.label.StartsWith(_defaultGrowingZonePrefix))
-                return growingZone.GetPlantDefToGrow().label.ToUpper();
+            if (growingZone.label?.StartsWith(_defaultGrowingZonePrefix) ?? false)
+                return growingZone.GetPlantDefToGrow()?.label?.ToUpper() ?? string.Empty;
 
-            return growingZone.label.ToUpper();
+            return growingZone.label?.ToUpper() ?? string.Empty;
         }
     }
 }
