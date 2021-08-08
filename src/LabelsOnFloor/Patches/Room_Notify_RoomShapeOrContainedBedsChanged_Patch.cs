@@ -3,7 +3,7 @@ using Verse;
 
 namespace LabelsOnFloor
 {
-    [HarmonyPatch(typeof(Room), "Notify_RoomShapeOrContainedBedsChanged")]
+    [HarmonyPatch(typeof(Room), "Notify_RoomShapeChanged")]
     public class Room_Notify_RoomShapeOrContainedBedsChanged_Patch
     {
         static void Postfix(ref Room __instance)

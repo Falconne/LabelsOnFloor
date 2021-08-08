@@ -4,7 +4,7 @@ using Verse;
 
 namespace LabelsOnFloor
 {
-    [HarmonyPatch(typeof(Room), "RemoveRegion")]
+    [HarmonyPatch(typeof(Room), "RemoveDistrict")]
     public class Room_RemoveRegion_Patch
     {
         static void Postfix(ref Room __instance)
