@@ -1,4 +1,0 @@
-!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`{|}~
-
-Font: Consolas, 48pt, no anti-aliasing
-Char width: 35pt
