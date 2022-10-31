@@ -5,7 +5,7 @@ namespace LabelsOnFloor
 {
     public class MeshHandler
     {
-        private readonly Dictionary<string, Mesh> _cachedMeshes = new Dictionary<string, Mesh>();
+        private readonly Dictionary<string, Mesh> _cachedMeshes = new();
 
         private readonly FontHandler _fontHandler;
 
@@ -42,6 +42,7 @@ namespace LabelsOnFloor
                 y = 2f
             };
 
+            string fontmap = "";
             var boundsInTexture = _fontHandler.GetBoundsInTextureFor(label);
             var startingTriangleVertex = 0;
             var startingVertexXOffset = 0f;
@@ -54,10 +55,12 @@ namespace LabelsOnFloor
                 vertices.Add(new Vector3(startingVertexXOffset + size.x, 0f, -0.4f));
                 startingVertexXOffset += size.x;
 
-                uvMap.Add(new Vector2(charBoundsInTexture.Left, 0f));
-                uvMap.Add(new Vector2(charBoundsInTexture.Left, 1f));
-                uvMap.Add(new Vector2(charBoundsInTexture.Right, 1f));
-                uvMap.Add(new Vector2(charBoundsInTexture.Right, 0f));
+                fontmap = charBoundsInTexture.FontBitmapName;
+                Rect boundsRect = charBoundsInTexture.Rect;
+                uvMap.Add(new Vector2(boundsRect.xMin, boundsRect.yMin));
+                uvMap.Add(new Vector2(boundsRect.xMin, boundsRect.yMax));
+                uvMap.Add(new Vector2(boundsRect.xMax, boundsRect.yMax));
+                uvMap.Add(new Vector2(boundsRect.xMax, boundsRect.yMin));
 
                 triangles.Add(startingTriangleVertex + 0);
                 triangles.Add(startingTriangleVertex + 1);
@@ -70,9 +73,9 @@ namespace LabelsOnFloor
 
             var mesh = new Mesh
             {
-                name = "NewPlaneMesh()",
+                name     = fontmap,
                 vertices = vertices.ToArray(),
-                uv = uvMap.ToArray()
+                uv       = uvMap.ToArray()
             };
             mesh.SetTriangles(triangles, 0);
             mesh.RecalculateNormals();

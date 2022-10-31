@@ -1,0 +1,136 @@
+╓──────────────────╖
+║Basic Instructions║
+╙──────────────────╜
+
+1. Make sure you have a good editor that can decode UTF-8.  If the above box art looks strange,
+it's probably trying to read this stuff in Latin-1.  Same for your console session.
+
+2. Grab the latest Cygwin and install it.  Be sure to select the latest version of Perl during the
+install process.  If you're on MacOS, you already have a good *NIX-based console, but you might
+need to install Perl.
+
+3. Get the latest version of ImageMagick from the web.  Cygwin's version is recent, but there was a
+bug related to font truncation that got fixed in late 2021, so it's not new enough.
+
+4. Download GNU Unifont and install that in a place accessible to ImageMagick.  You can run
+`magick -list font` to figure out where it needs the fonts.  Make sure you have the other two CJK
+fonts (Malgun Gothic and YaHei), and ImageMagick knows how to access it.
+
+(Check the $yahei_font variable to see if the YaHei font is named what its expects.)
+
+5. Now run `perl generate-font-textures.pl`, and hopefully everything runs okay.
+
+╓──────────────────────╖
+║Font Texture Generator║
+╙──────────────────────╜
+
+The font texture generator will run through the entire list of Unicode characters in the 2-byte
+range (commonly encoded as UTF-16), which is the range that C# strings natively supports.  It's not
+_everything_, but the 3&4-byte ranges in UTF-8 (the better, dynamic, and more recent encoding
+standard) mostly have small corrections, archaic or dead languages, and a ton of emoji that we
+don't care about.
+
+Combining characters (like the separate marks here: Z̶̮̪̊̈a̴͓̿͂l̷̟̍g̴̯̩͑͘o̶̥̺͛̂) are not supported, but if there is a
+single character with those marks, then NFC form will use that.  (See "text.Normalize()" in
+FontHandler.cs.)  Or NFKC form as a last resort.
+
+There's a bunch of other exceptions in the generator, so examine the main codepoint loop for those.
+
+There are four fonts used because not every font can display every character.  Except Unifont.
+But, it's ugly.  So, Consolas because it's the original font used and can handle a lot of the
+Latin/Germanic characters.  Malgun/YaHei because it handles all of the CJK (Chinese/Japanese/Korean)
+glyphs.  And Unifont as a font of last resort, usually for symbolage.
+
+╓──────────────────╖
+║Parsing the Output║
+╙──────────────────╜
+
+The actual character output of the generator isn't all that important, except to give you a
+progress bar.  It takes ~20 minutes, because all of those calls to `charprop` are rather slow.
+At the end, you'll get several files:
+
+    *.txt        - Actual text characters to turn into a bitmap
+    *.png        - Bitmaps, one for each font.  Two for Unifont, because wide characters.
+    Combined.png - A combination of all of the bitmaps into one texture, because multi-texture
+                   display was too hard to implement (and probably the wrong approach)
+    TEST-*.png   - Test images to see if there are opportunities to take Unifont characters and
+                   move them to prettier fonts
+    Offsets.cs   - Partial C# code to plop into Resources.cs.
+
+Examine everything to see if it looks right:
+
+1. Each character in the bitmaps should all be aligned to be the same width.  If one line is wider
+than the other, then a set of wide characters might have snuck through.  Or halfwidth characters in
+a wide set.
+
+2. Besides the single space character at 0x0 Consolas, there should be no gaps in the characters.
+If there is, then the font doesn't have that character to render, and the character should be moved
+to a different font.
+
+3. The TEST-*.png images show the Unifont set of characters as displayed in different fonts.  They
+should have a relatively light display of symbols and that's it.  There might be a few letters/CJK
+glyphs here and there, but most of the major sets of characters should be moved to the prettier
+fonts that can display them.
+
+4. Combined.png should have all of the sets combined.  Most importantly, it should be less than
+16394 pixels in size in either direction.  That is the Unity Texture2D limit in
+SystemInfo.maxTextureSize.
+
+Fortunately, all of that should be tweaked to pass those tests, so take those bitmaps (minus
+TEST-*.png) and dump them into Textures\FontBitmaps.  Don't forget to dump the two dictionaries in
+in Offsets.cs into the right spot in Resources.cs and re-compile the code.
+
+If not, there's always...
+
+╓─────────╖
+║Debugging║
+╙─────────╜
+
+Missing characters
+──────────────────
+Gaps in bitmaps are because the font can't render the character.  You'll need to open up the text
+file, pinpoint the right character, and figure out if the character properties fits in a certain
+class that the font doesn't support.  For example, perhaps the entire block is unsupported (Block).
+Or the Unicode version is too new for the font (Present_In).  Or it's just some random character
+that needs to be manually-shifted to Unifont.
+
+The codepoints.net site is an excellent resource for getting Unicode properties of a specific
+character.  You can always plug in a character directly into the URL like this:
+
+https://codepoints.net/豈
+https://codepoints.net/U+F900
+
+Most of the properties directly translate to what they are displayed in Perl, but you can confirm
+with:
+
+perl -MUnicode::UCD=charprops_all -MData::Dumper=Dumper -E '$charinfo = charprops_all(0xF900); $Data::Dumper::Sortkeys=$Data::Dumper::Terse=$Data::Dumper::Indent=1; say Dumper $charinfo;'
+
+Replacing 'F900' with your character codepoint.  (Install Data::Dumper, if it's not already in
+place.)
+
+Width problems
+──────────────
+The East_Asian_Width property is good at figuring out if a character is wide or not, but it's a
+Unicode property that was only designed for... East Asian characters.  There's a lot of wide
+characters that are mixed in different sets and there's no obvious Unicode property to actually
+tell you it's wide.  Unifont is especially bad at randomly shifting from halfwidth to wide
+characters for either no reason or inconsistent reasons.  Hence all of the manual placement in
+%unifont_wide and %unifont_narrow.
+
+If you're having trouble figuring out which is wide or not in a line, put that line in a
+width-test.txt file and run the following:
+
+perl -pi -CSDA -E 's/(.)/\x{2588}$1\x{2588}\n/gu' width-test.txt
+
+Then create a test image with something like:
+
+magick -background transparent -fill white +antialias -pointsize 48 -encoding unicode -interline-spacing 2 -font Unifont 'label:@width-test.txt' -colors 2 -colorspace gray -trim +repage TEST-Unifont_Width.png
+
+Moving characters to different fonts
+────────────────────────────────────
+The "Figure out where to write this thing" block and unifont_* variables control most of that.
+
+Fixing characters per column
+────────────────────────────
+The %max_col hash controls that.  If the Combined.png image is too wide, try changing the
+Consolas or YaHei blocks to make it thinner and taller.
