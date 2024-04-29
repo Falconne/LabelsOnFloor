@@ -3,7 +3,7 @@ using Verse;
 
 namespace LabelsOnFloor
 {
-    [HarmonyPatch(typeof(Dialog_RenameZone), "SetName")]
+    [HarmonyPatch(typeof(Dialog_RenameZone), "OnRenamed")]
     public class Dialog_RenameZone_SetName_Patch
     {
         static void Postfix()

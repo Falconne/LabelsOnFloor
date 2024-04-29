@@ -2,17 +2,17 @@
 
 namespace LabelsOnFloor
 {
-    public class Dialog_RenameRoom : Dialog_Rename
+    public class Dialog_RenameRoom : Dialog_Rename<IRenameable>
     {
         private readonly CustomRoomData _customRoomData;
 
-        public Dialog_RenameRoom(CustomRoomData customRoomData)
+        public Dialog_RenameRoom(CustomRoomData customRoomData) : base(null)
         {
             _customRoomData = customRoomData;
             curName = customRoomData.Label;
         }
 
-        protected override void SetName(string name)
+        protected override void OnRenamed(string name)
         {
             _customRoomData.Label = name;
             Main.Instance.LabelPlacementHandler.SetDirty();
