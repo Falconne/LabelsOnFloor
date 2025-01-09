@@ -65,6 +65,7 @@ namespace LabelsOnFloor
         private int GetIndexInFontForChar(char c)
         {
             var asciiVal = (int) c;
+            var cyrillicModifier = 1039;
             if (asciiVal < 33)
                 return 0;
 
@@ -73,6 +74,15 @@ namespace LabelsOnFloor
             
             if (asciiVal < 127)
                 return asciiVal - 58;
+
+            if (asciiVal == 1025) //For letter "Ё" as an exception
+                return 75;
+
+            if (asciiVal < 1046 && asciiVal > 1039) //Before "Ё"
+                return asciiVal - cyrillicModifier + 68;
+
+            if (asciiVal < 1072 && asciiVal > 1045) //After "Ё"
+                return asciiVal - cyrillicModifier + 68 + 1;
 
             return 0;
         }
