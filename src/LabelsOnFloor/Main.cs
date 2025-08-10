@@ -73,7 +73,7 @@ namespace LabelsOnFloor
             return _enabled
                    && Current.ProgramState == ProgramState.Playing
                    && Find.CurrentMap != null
-                   && !WorldRendererUtility.WorldRenderedNow;
+                   && !WorldRendererUtility.WorldRendered;
         }
 
         public bool UseLightText()
@@ -108,7 +108,7 @@ namespace LabelsOnFloor
 
         public override void OnGUI()
         {
-            if (WorldRendererUtility.WorldRenderedNow)
+            if (WorldRendererUtility.WorldRendered)
                 LabelPlacementHandler?.SetDirty();
 
             base.OnGUI();

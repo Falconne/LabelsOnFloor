@@ -128,7 +128,7 @@ namespace LabelsOnFloor
                 return;
 
             var roomPlacementDataFinder = new PlacementDataFinderForRooms(_map);
-            foreach (var room in _map.regionGrid.allRooms)
+            foreach (var room in _map.regionGrid.AllRooms)
             {
                 AddOrUpdateRoom(room, roomPlacementDataFinder);
             }
